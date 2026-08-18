@@ -137,16 +137,14 @@
         </div>
 
         <form id="form-hadir" onsubmit="submitHadir(event)" class="flex flex-col gap-4">
-          <!-- Tambahan required di seluruh input -->
           <div><label class="block text-xs font-bold text-slate-600 mb-1">Nama Lengkap (Boleh Pakai Gelar)</label><input type="text" id="h-nama" required class="w-full bg-white/80 border border-slate-300 rounded-xl p-3.5 text-sm focus:ring-2 focus:ring-orange-500 font-medium shadow-sm"></div>
           <div><label class="block text-xs font-bold text-slate-600 mb-1">Instansi / Satker / Organisasi / Lainnya</label><input type="text" id="h-instansi" required class="w-full bg-white/80 border border-slate-300 rounded-xl p-3.5 text-sm focus:ring-2 focus:ring-orange-500 font-medium shadow-sm"></div>
           <div><label class="block text-xs font-bold text-slate-600 mb-1">Email Aktif</label><input type="email" id="h-email" required class="w-full bg-white/80 border border-slate-300 rounded-xl p-3.5 text-sm focus:ring-2 focus:ring-orange-500 font-medium shadow-sm"></div>
           <div><label class="block text-xs font-bold text-slate-600 mb-1">Nomor HP</label><input type="number" id="h-hp" required class="w-full bg-white/80 border border-slate-300 rounded-xl p-3.5 text-sm focus:ring-2 focus:ring-orange-500 font-medium shadow-sm"></div>
           
-          <!-- INPUT FILE UNTUK BUKTI ZOOM (Wajib/Required) -->
           <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
              <label class="block text-xs font-bold text-slate-600 mb-1">Unggah Bukti Mengikuti Zoom</label>
-             <p class="text-[10px] text-slate-500 mb-2">Format yang didukung: JPG, JPEG, atau PNG (Maks 3MB).</p>
+             <p class="text-[10px] text-slate-500 mb-2">Hanya menerima format JPG, JPEG, atau PNG (Maks 3MB).</p>
              <input type="file" id="h-bukti" required accept=".jpg, .jpeg, .png" class="w-full text-xs font-medium file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-orange-100 file:text-orange-700 hover:file:bg-orange-200">
           </div>
 
@@ -187,7 +185,7 @@
         
         <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
           
-          <!-- Kiri: Setup Template (7 Col) -->
+          <!-- Kiri: Setup Template -->
           <div class="xl:col-span-7 bg-white p-5 lg:p-8 rounded-[1.5rem] border border-slate-200 shadow-sm flex flex-col">
             <h3 class="text-base lg:text-xl font-extrabold text-slate-800 mb-4 border-b pb-2">1. Konfigurasi Template</h3>
             <div class="mb-4 flex flex-col md:flex-row gap-3">
@@ -232,7 +230,7 @@
             <p class="text-[11px] font-mono bg-slate-800 text-green-400 p-3 rounded-xl border border-slate-700 shadow-inner" id="coord-info">Koordinat: X=0, Y=0</p>
           </div>
 
-          <!-- Kanan: Data Peserta (5 Col) -->
+          <!-- Kanan: Data Peserta -->
           <div class="xl:col-span-5 bg-white p-5 lg:p-8 rounded-[1.5rem] border border-slate-200 shadow-sm flex flex-col">
             <h3 class="text-base lg:text-xl font-extrabold text-slate-800 mb-4 border-b pb-2 flex justify-between items-center">
               2. Data Peserta
@@ -397,31 +395,52 @@
       if(view === 'home') loadStats();
     }
 
-    // --- AGENDA & EBOOK USER ---
+    // --- AGENDA & EBOOK USER DENGAN STATUS WAKTU ---
     async function navToAgenda() {
       navTo('agenda'); document.getElementById('list-agenda-user').innerHTML = '<p class="text-center text-sm py-4">Memuat...</p>';
       const res = await fetchAPI('getAgenda');
       if (!res.data || res.data.length === 0) return document.getElementById('list-agenda-user').innerHTML = '<div class="bg-slate-50 p-6 rounded-xl text-center"><p class="text-sm font-medium">Belum ada agenda.</p></div>';
       let html = '';
       res.data.forEach(row => {
-        const waktu = new Date(row[2]).toLocaleString('id-ID', { dateStyle: 'full', timeStyle: 'short' });
+        const waktuDate = new Date(row[2]);
+        const waktu = waktuDate.toLocaleString('id-ID', { dateStyle: 'full', timeStyle: 'short' });
+        
+        // Logika Status Rapat
+        const now = new Date().getTime();
+        const agendaTime = waktuDate.getTime();
+        const duration = 2 * 60 * 60 * 1000; // Asumsi rapat 2 jam
+        
+        let statusBadge = '';
+        if (now < agendaTime) {
+            statusBadge = `<span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-[10px] font-bold uppercase ml-2 animate-pulse shadow-sm">⏳ Segera</span>`;
+        } else if (now >= agendaTime && now <= (agendaTime + duration)) {
+            statusBadge = `<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded text-[10px] font-bold uppercase ml-2 animate-pulse shadow-sm border border-green-200">🟢 Berlangsung</span>`;
+        } else {
+            statusBadge = `<span class="bg-slate-200 text-slate-500 px-2 py-0.5 rounded text-[10px] font-bold uppercase ml-2 shadow-sm border border-slate-300">🏁 Berakhir</span>`;
+        }
         
         let infoSection = '';
         if(row[4] || row[5] || row[6] || row[7]) {
-            infoSection = `<div class="mt-4 bg-white p-4 md:p-5 rounded-xl border border-slate-200 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs md:text-sm shadow-sm">`;
-            
-            if(row[4]) infoSection += `<div class="md:col-span-2"><span class="text-slate-500 block text-[10px] md:text-[11px] uppercase font-bold mb-1.5">Tautan Rapat (Zoom/Meet)</span><div class="flex justify-between items-center bg-slate-50 border border-slate-200 p-2.5 md:p-3 rounded-lg"><a href="${formatUrl(row[4])}" target="_blank" class="font-mono text-blue-600 text-xs md:text-sm truncate max-w-[85%] hover:underline font-bold">${row[4]}</a><button onclick="copyTxt('${row[4]}')" class="text-slate-400 hover:text-blue-600 transition" title="Copy">📋</button></div></div>`;
-            
-            if(row[5]) infoSection += `<div><span class="text-slate-500 block text-[10px] md:text-[11px] uppercase font-bold mb-1.5">Meeting ID</span><div class="flex justify-between items-center bg-slate-50 border border-slate-200 p-2.5 md:p-3 rounded-lg"><span class="font-mono font-bold text-slate-700 text-sm md:text-base">${row[5]}</span><button onclick="copyTxt('${row[5]}')" class="text-slate-400 hover:text-blue-600 transition" title="Copy">📋</button></div></div>`;
-            
-            if(row[6]) infoSection += `<div><span class="text-slate-500 block text-[10px] md:text-[11px] uppercase font-bold mb-1.5">Passcode</span><div class="flex justify-between items-center bg-slate-50 border border-slate-200 p-2.5 md:p-3 rounded-lg"><span class="font-mono font-bold text-slate-700 text-sm md:text-base">${row[6]}</span><button onclick="copyTxt('${row[6]}')" class="text-slate-400 hover:text-blue-600 transition" title="Copy">📋</button></div></div>`;
-            
-            if(row[7]) infoSection += `<div class="md:col-span-2"><span class="text-slate-500 block text-[10px] md:text-[11px] uppercase font-bold mb-1.5">Link Virtual Background</span><div class="flex justify-between items-center bg-slate-50 border border-slate-200 p-2.5 md:p-3 rounded-lg"><a href="${formatUrl(row[7])}" target="_blank" class="font-mono text-blue-600 text-xs md:text-sm truncate max-w-[85%] hover:underline font-bold">${row[7]}</a><button onclick="copyTxt('${row[7]}')" class="text-slate-400 hover:text-blue-600 transition" title="Copy">📋</button></div></div>`;
-            
+          infoSection = `<div class="mt-4 bg-white p-4 md:p-5 rounded-xl border border-slate-200 flex flex-col gap-4 shadow-sm">`;
+          
+          if(row[5] || row[6]) {
+            infoSection += `<div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 text-xs md:text-sm">`;
+            if(row[5]) infoSection += `<div><span class="text-slate-500 block text-[10px] md:text-[11px] uppercase font-bold mb-1.5">Meeting ID</span><div class="flex justify-between items-center bg-slate-50 border border-slate-200 p-2.5 md:p-3 rounded-lg"><span class="font-mono font-bold text-slate-800 text-sm md:text-base">${row[5]}</span><button onclick="copyTxt('${row[5]}')" class="text-slate-400 hover:text-blue-600 transition" title="Copy">📋</button></div></div>`;
+            if(row[6]) infoSection += `<div><span class="text-slate-500 block text-[10px] md:text-[11px] uppercase font-bold mb-1.5">Passcode</span><div class="flex justify-between items-center bg-slate-50 border border-slate-200 p-2.5 md:p-3 rounded-lg"><span class="font-mono font-bold text-slate-800 text-sm md:text-base">${row[6]}</span><button onclick="copyTxt('${row[6]}')" class="text-slate-400 hover:text-blue-600 transition" title="Copy">📋</button></div></div>`;
             infoSection += `</div>`;
+          }
+
+          if(row[4] || row[7]) {
+            infoSection += `<div class="flex flex-col sm:flex-row gap-3">`;
+            if(row[4]) infoSection += `<a href="${formatUrl(row[4])}" target="_blank" class="flex-1 bg-blue-600 text-white px-4 py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-blue-700 shadow-md text-center transition active:scale-95">🌐 Buka Tautan Rapat</a>`;
+            if(row[7]) infoSection += `<a href="${formatUrl(row[7])}" target="_blank" class="flex-1 bg-indigo-50 text-indigo-700 border border-indigo-200 px-4 py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-indigo-100 text-center transition active:scale-95">🖼️ Lihat/Unduh Background</a>`;
+            infoSection += `</div>`;
+          }
+          
+          infoSection += `</div>`;
         }
 
-        html += `<div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 shadow-sm"><div class="flex justify-between items-start"><div><span class="bg-indigo-100 text-indigo-700 px-2 py-1 rounded-md text-[10px] font-bold uppercase">${row[3]}</span><h3 class="font-extrabold text-lg mt-2">${row[1]}</h3><p class="text-xs text-slate-500 mt-1">🗓️ ${waktu}</p></div></div>${infoSection}</div>`;
+        html += `<div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 shadow-sm"><div class="flex flex-col gap-2"><span class="bg-indigo-100 text-indigo-700 w-fit px-2 py-1 rounded-md text-[10px] font-bold uppercase">${row[3]}</span><h3 class="font-extrabold text-lg mt-1">${row[1]}</h3><p class="text-xs text-slate-600 font-medium flex items-center flex-wrap gap-y-2">🗓️ ${waktu} ${statusBadge}</p></div>${infoSection}</div>`;
       });
       document.getElementById('list-agenda-user').innerHTML = html;
     }
@@ -487,7 +506,6 @@
 
       showLoading('Menyimpan Data & Mengunggah Bukti...');
       
-      // Convert file to Base64 (Ringan di Browser)
       const reader = new FileReader();
       reader.onload = async function(event) {
           const base64Data = event.target.result.split(',')[1];
@@ -539,20 +557,18 @@
       }
     }
 
-    // MUAT KONFIGURASI TEMPLATE TERAKHIR
     function muatKonfigurasiTerakhir() {
         if(!savedTemplateConfig) return Swal.fire('Info', 'Belum ada pengaturan template yang tersimpan sebelumnya.', 'info');
         try {
             els = JSON.parse(savedTemplateConfig);
-            changeCanvasElement(); // Update input di layar
-            previewCanvas(); // Redraw canvas
+            changeCanvasElement(); 
+            previewCanvas(); 
             Swal.fire({toast: true, position: 'top-end', showConfirmButton: false, timer: 1500, icon: 'success', title: 'Dimuat!'});
         } catch(e) { console.error("Error parse JSON template"); }
     }
 
     async function saveSettings() {
       showLoading('Menyimpan...');
-      // Ambil Konfigurasi Template saat ini untuk disimpan ke server
       const currentConfigStr = JSON.stringify(els);
       const res = await fetchAPI('simpanSettings', { 
           start: document.getElementById('t-start').value, 
