@@ -144,7 +144,7 @@
           
           <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
              <label class="block text-xs font-bold text-slate-600 mb-1">Unggah Bukti Mengikuti Zoom</label>
-             <p class="text-[10px] text-slate-500 mb-2">Format yang didukung: JPG, JPEG, atau PNG (Maks 3MB).</p>
+             <p class="text-[10px] text-slate-500 mb-2">Format yang didukung: JPG, JPEG, atau PNG.</p>
              <input type="file" id="h-bukti" required accept=".jpg, .jpeg, .png" class="w-full text-xs font-medium file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-orange-100 file:text-orange-700 hover:file:bg-orange-200">
           </div>
 
@@ -322,7 +322,7 @@
     // ==========================================
     // MASUKKAN URL WEB APP GOOGLE APPS SCRIPT
     // ==========================================
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbxRrop5ExtYD_f32HXhsfk9t7g382IA3FBrAEgKvkR83DUTPFEfStRM8nLwydMYVY76/exec"; 
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbzX47qr-IM2UywpWgRRf2m5NTkX_5yYnKqfWeFTcL2vntmcyEVWYywke_bbKxvdmRD1/exec"; 
 
     let emailCache = new Set();
     let savedTemplateConfig = ""; 
@@ -351,6 +351,38 @@
     }
 
     function formatUrl(url) { return /^https?:\/\//i.test(url.trim()) ? url.trim() : 'https://' + url.trim(); }
+
+    // FUNGSI KOMPRESI GAMBAR (Dijalankan di HP peserta agar ukuran jadi ~150KB)
+    function compressImage(file, callback) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function(event) {
+            const img = new Image();
+            img.src = event.target.result;
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                const MAX_WIDTH = 800;
+                const MAX_HEIGHT = 800;
+                let width = img.width;
+                let height = img.height;
+
+                if (width > height) {
+                    if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+                } else {
+                    if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
+                }
+                
+                canvas.width = width;
+                canvas.height = height;
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.6); // Kompres 60%
+                callback(dataUrl.split(',')[1]); 
+            }
+        }
+    }
 
     // AUTO-RETRY SYSTEM UNTUK MENGATASI CORS / COLD START
     async function fetchAPI(action, params = {}, method = 'GET', retries = 2) {
@@ -500,13 +532,14 @@
       }
       
       const file = fileInput.files[0];
-      if (file.size > 3 * 1024 * 1024) {
-          return Swal.fire('Peringatan', 'Ukuran file terlalu besar! Maksimal 3MB.', 'warning');
+      // Batas aman sebelum dikompresi
+      if (file.size > 15 * 1024 * 1024) {
+          return Swal.fire('Peringatan', 'Ukuran file asli terlalu besar! Maksimal 15MB.', 'warning');
       }
 
-      showLoading('Menyimpan Data...');
+      showLoading('Mendaftarkan Kehadiran...');
       
-      // 1. KIRIM DATA TEKS DULU (Sangat Cepat)
+      // 1. KIRIM DATA TEKS DULU (Sangat Cepat - Milidetik)
       const dataText = [ 
           document.getElementById('h-nama').value, 
           document.getElementById('h-instansi').value, 
@@ -524,19 +557,15 @@
           navTo('home');
           Swal.fire('Berhasil!', resTeks.message, 'success');
           
-          // 2. KIRIM FILE GAMBAR DI BACKGROUND SECARA ASYNCHRONOUS
-          const reader = new FileReader();
-          reader.onload = async function(event) {
-              const base64Data = event.target.result.split(',')[1];
-              // Background upload, pengguna tidak perlu menunggu ini selesai untuk bisa lanjut
+          // 2. KOMPRES GAMBAR & KIRIM DI BACKGROUND (Peserta sudah tidak menunggu loading)
+          compressImage(file, function(base64Compressed) {
               fetchAPI('uploadBukti', { 
                   email: inputEmail,
-                  fileData: base64Data, 
-                  fileName: file.name, 
-                  fileMimeType: file.type 
-              }, 'POST', 3); // 3x Retry jika error
-          };
-          reader.readAsDataURL(file);
+                  fileData: base64Compressed, 
+                  fileName: file.name + "_compressed.jpg", 
+                  fileMimeType: "image/jpeg" 
+              }, 'POST', 3); 
+          });
 
       } else {
           Swal.fire('Gagal', resTeks.message, 'warning');
@@ -570,7 +599,6 @@
       }
     }
 
-    // MUAT KONFIGURASI TEMPLATE TERAKHIR
     function muatKonfigurasiTerakhir() {
         if(!savedTemplateConfig) return Swal.fire('Info', 'Belum ada pengaturan template yang tersimpan sebelumnya.', 'info');
         try {
@@ -583,7 +611,6 @@
 
     async function saveSettings() {
       showLoading('Menyimpan...');
-      // Ambil Konfigurasi Template saat ini untuk disimpan ke server
       const currentConfigStr = JSON.stringify(els);
       const res = await fetchAPI('simpanSettings', { 
           start: document.getElementById('t-start').value, 
