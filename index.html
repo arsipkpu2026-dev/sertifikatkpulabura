@@ -136,7 +136,7 @@
         <div id="info-waktu-hadir" class="mb-5 hidden text-xs lg:text-sm font-medium text-amber-800 bg-amber-50 p-4 rounded-xl border border-amber-200 shadow-sm leading-relaxed">
         </div>
 
-        <form id="form-hadir" onsubmit="submitHadir(event)" class="flex flex-col gap-4">
+        <form id="form-hadir" onsubmit="submitHadirTeks(event)" class="flex flex-col gap-4">
           <div><label class="block text-xs font-bold text-slate-600 mb-1">Nama Lengkap (Boleh Pakai Gelar)</label><input type="text" id="h-nama" required class="w-full bg-white/80 border border-slate-300 rounded-xl p-3.5 text-sm focus:ring-2 focus:ring-orange-500 font-medium shadow-sm"></div>
           <div><label class="block text-xs font-bold text-slate-600 mb-1">Instansi / Satker / Organisasi / Lainnya</label><input type="text" id="h-instansi" required class="w-full bg-white/80 border border-slate-300 rounded-xl p-3.5 text-sm focus:ring-2 focus:ring-orange-500 font-medium shadow-sm"></div>
           <div><label class="block text-xs font-bold text-slate-600 mb-1">Email Aktif</label><input type="email" id="h-email" required class="w-full bg-white/80 border border-slate-300 rounded-xl p-3.5 text-sm focus:ring-2 focus:ring-orange-500 font-medium shadow-sm"></div>
@@ -144,7 +144,7 @@
           
           <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
              <label class="block text-xs font-bold text-slate-600 mb-1">Unggah Bukti Mengikuti Zoom</label>
-             <p class="text-[10px] text-slate-500 mb-2">Hanya menerima format JPG, JPEG, atau PNG (Maks 3MB).</p>
+             <p class="text-[10px] text-slate-500 mb-2">Format yang didukung: JPG, JPEG, atau PNG (Maks 3MB).</p>
              <input type="file" id="h-bukti" required accept=".jpg, .jpeg, .png" class="w-full text-xs font-medium file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-orange-100 file:text-orange-700 hover:file:bg-orange-200">
           </div>
 
@@ -152,7 +152,7 @@
             <input type="checkbox" id="h-auto-email" class="w-5 h-5 mt-0.5 text-orange-600 rounded">
             <label for="h-auto-email" class="text-xs text-slate-700 font-bold">Kirim ke email saya otomatis bila sertifikat tersedia. (Inbox/ Spam)</label>
           </div>
-          <button type="submit" class="w-full mt-2 bg-gradient-to-r from-orange-600 to-amber-500 text-white font-black py-4 rounded-xl hover:from-orange-700 hover:to-amber-600 shadow-xl text-sm">Kirim Data Kehadiran</button>
+          <button type="submit" class="w-full mt-2 bg-gradient-to-r from-orange-600 to-amber-500 text-white font-black py-4 rounded-xl hover:from-orange-700 hover:to-amber-600 shadow-xl text-sm transition active:scale-95">Kirim Data Kehadiran</button>
         </form>
       </div>
 
@@ -163,7 +163,7 @@
         <form id="form-download" onsubmit="submitDownload(event)" class="flex flex-col gap-4">
           <div><label class="block text-xs font-bold text-slate-600 mb-1">Nama Lengkap (Sesuai yang diisi di daftar hadir)</label><input type="text" id="d-nama" required class="w-full bg-white/80 border border-slate-300 rounded-xl p-3.5 text-sm focus:ring-2 focus:ring-emerald-500 font-medium"></div>
           <div><label class="block text-xs font-bold text-slate-600 mb-1">Email</label><input type="email" id="d-email" required class="w-full bg-white/80 border border-slate-300 rounded-xl p-3.5 text-sm focus:ring-2 focus:ring-emerald-500 font-medium"></div>
-          <button type="submit" class="w-full mt-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-black py-4 rounded-xl shadow-xl text-sm">Cari & Unduh</button>
+          <button type="submit" class="w-full mt-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-black py-4 rounded-xl shadow-xl text-sm transition active:scale-95">Cari & Unduh</button>
         </form>
       </div>
 
@@ -174,13 +174,13 @@
         <form id="form-login" onsubmit="submitLogin(event)" class="flex flex-col gap-4">
           <input type="text" id="l-user" required placeholder="Username" class="w-full bg-white border border-slate-300 rounded-xl p-3.5 text-sm focus:ring-2 focus:ring-slate-800 text-center font-bold">
           <input type="password" id="l-pass" required placeholder="Password" class="w-full bg-white border border-slate-300 rounded-xl p-3.5 text-sm focus:ring-2 focus:ring-slate-800 text-center font-bold">
-          <button type="submit" class="w-full mt-2 bg-slate-800 text-white font-black py-4 rounded-xl shadow-xl text-sm">Masuk</button>
+          <button type="submit" class="w-full mt-2 bg-slate-800 text-white font-black py-4 rounded-xl shadow-xl text-sm transition active:scale-95">Masuk</button>
         </form>
       </div>
 
       <!-- VIEW: ADMIN DASHBOARD -->
       <div id="view-admin" class="view-section flex-col bg-white/95 backdrop-blur-xl p-4 md:p-8 lg:p-10 rounded-[2rem] shadow-2xl border border-white/60 my-auto w-full max-w-[100%] mx-auto">
-        <button onclick="navTo('home')" class="text-xs lg:text-sm text-blue-700 font-bold mb-6 hover:bg-blue-100 bg-blue-50 px-4 py-2 rounded-xl w-fit border border-blue-100">← Kembali</button>
+        <button onclick="navTo('home')" class="text-xs lg:text-sm text-blue-700 font-bold mb-6 hover:bg-blue-100 bg-blue-50 px-4 py-2 rounded-xl w-fit border border-blue-100 transition active:scale-95">← Kembali</button>
         <h2 class="text-2xl lg:text-4xl font-extrabold text-slate-800 mb-6 tracking-tight border-b pb-4">Dashboard Administrator</h2>
         
         <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
@@ -190,7 +190,7 @@
             <h3 class="text-base lg:text-xl font-extrabold text-slate-800 mb-4 border-b pb-2">1. Konfigurasi Template</h3>
             <div class="mb-4 flex flex-col md:flex-row gap-3">
               <input type="file" id="template-upload" accept="image/png, image/jpeg, application/pdf" class="w-full border p-2 rounded-xl text-xs bg-slate-50 cursor-pointer flex-grow" onchange="loadTemplate(event)">
-              <button onclick="muatKonfigurasiTerakhir()" class="bg-blue-50 text-blue-700 px-4 py-2 rounded-xl border border-blue-200 text-xs font-bold hover:bg-blue-100 transition whitespace-nowrap">Muat Pengaturan Terakhir</button>
+              <button onclick="muatKonfigurasiTerakhir()" class="bg-blue-50 text-blue-700 px-4 py-2 rounded-xl border border-blue-200 text-xs font-bold hover:bg-blue-100 transition whitespace-nowrap active:scale-95">Muat Pengaturan Terakhir</button>
             </div>
             
             <div class="mb-4 bg-blue-50 p-4 rounded-xl border border-blue-100">
@@ -234,7 +234,7 @@
           <div class="xl:col-span-5 bg-white p-5 lg:p-8 rounded-[1.5rem] border border-slate-200 shadow-sm flex flex-col">
             <h3 class="text-base lg:text-xl font-extrabold text-slate-800 mb-4 border-b pb-2 flex justify-between items-center">
               2. Data Peserta
-              <button onclick="loadDataPeserta()" class="text-[10px] bg-blue-50 text-blue-700 px-3 py-1.5 rounded-lg border border-blue-100 shadow-sm font-bold">🔄 Refresh</button>
+              <button onclick="loadDataPeserta()" class="text-[10px] bg-blue-50 text-blue-700 px-3 py-1.5 rounded-lg border border-blue-100 shadow-sm font-bold transition active:scale-95">🔄 Refresh</button>
             </h3>
             <div class="overflow-x-auto border rounded-xl flex-grow max-h-[400px] xl:max-h-[500px] custom-scroll">
               <table class="w-full text-xs text-left">
@@ -243,8 +243,8 @@
               </table>
             </div>
             <div class="mt-4 flex flex-col gap-3">
-              <button onclick="generateMassal()" class="w-full bg-slate-800 text-white font-black py-3.5 rounded-xl text-sm">1. Buat PDF (Simpan ke Drive)</button>
-              <button onclick="triggerKirimEmail()" class="w-full bg-green-600 text-white font-black py-3.5 rounded-xl text-sm">📧 2. Kirim Email Peserta (Dari Folder TTE)</button>
+              <button onclick="generateMassal()" class="w-full bg-slate-800 text-white font-black py-3.5 rounded-xl text-sm transition active:scale-95">1. Buat PDF (Simpan ke Drive)</button>
+              <button onclick="triggerKirimEmail()" class="w-full bg-green-600 text-white font-black py-3.5 rounded-xl text-sm transition active:scale-95">📧 2. Kirim Email Peserta (Dari Folder TTE)</button>
             </div>
           </div>
         </div>
@@ -261,7 +261,7 @@
               <input type="text" id="a-id" placeholder="Meeting ID (Opsional)" class="border p-2 rounded-xl text-xs bg-slate-50">
               <input type="text" id="a-pass" placeholder="Passcode (Opsional)" class="border p-2 rounded-xl text-xs bg-slate-50">
               <input type="text" id="a-bg" placeholder="Tautan Background Zoom (Opsional)" class="col-span-2 border p-2 rounded-xl text-xs bg-slate-50">
-              <button type="submit" class="col-span-2 bg-blue-600 text-white font-bold py-2 rounded-xl text-xs">➕ Tambah Agenda</button>
+              <button type="submit" class="col-span-2 bg-blue-600 text-white font-bold py-2 rounded-xl text-xs transition active:scale-95">➕ Tambah Agenda</button>
             </form>
             <div class="overflow-auto border rounded-xl max-h-40"><table class="w-full text-xs text-left"><tbody id="table-agenda-admin" class="divide-y"></tbody></table></div>
           </div>
@@ -272,7 +272,7 @@
               <input type="text" id="e-judul" required placeholder="Judul Materi / E-Book" class="border p-2 rounded-xl text-xs bg-slate-50">
               <input type="text" id="e-desc" placeholder="Deskripsi Singkat" class="border p-2 rounded-xl text-xs bg-slate-50">
               <input type="text" id="e-link" required placeholder="Link URL Download (Drive/Dll)" class="border p-2 rounded-xl text-xs bg-slate-50">
-              <button type="submit" class="bg-purple-600 text-white font-bold py-2 rounded-xl text-xs">➕ Tambah E-Book</button>
+              <button type="submit" class="bg-purple-600 text-white font-bold py-2 rounded-xl text-xs transition active:scale-95">➕ Tambah E-Book</button>
             </form>
             <div class="overflow-auto border rounded-xl max-h-40"><table class="w-full text-xs text-left"><tbody id="table-ebook-admin" class="divide-y"></tbody></table></div>
           </div>
@@ -292,7 +292,7 @@
               <div id="kode-container"><label class="block text-[10px] font-bold">Format Kode</label><input type="text" id="s-kode" placeholder="/HM.06-Kt/1223/2/2026" class="w-full border p-2 rounded-lg text-xs font-mono"></div>
               <div class="sm:col-span-2"><label class="block text-[10px] font-bold">Email Administrator</label><input type="email" id="a-email" placeholder="admin@kpu.go.id" class="w-full border p-2 rounded-lg text-xs"></div>
             </div>
-            <button onclick="saveSettings()" class="w-full bg-blue-600 text-white font-bold py-2.5 rounded-lg text-xs">Simpan Pengaturan</button>
+            <button onclick="saveSettings()" class="w-full bg-blue-600 text-white font-bold py-2.5 rounded-lg text-xs transition active:scale-95">Simpan Pengaturan</button>
           </div>
           
           <div class="bg-slate-50 p-5 rounded-[1.5rem] border shadow-sm flex flex-col justify-between">
@@ -303,7 +303,7 @@
                 <input type="password" id="p-new" placeholder="Password Baru" class="w-full border p-2.5 rounded-lg text-xs">
               </div>
             </div>
-            <button onclick="changePassword()" class="w-full bg-red-600 text-white font-bold py-2.5 rounded-lg text-xs">Ganti Password</button>
+            <button onclick="changePassword()" class="w-full bg-red-600 text-white font-bold py-2.5 rounded-lg text-xs transition active:scale-95">Ganti Password</button>
           </div>
         </div>
       </div>
@@ -322,7 +322,7 @@
     // ==========================================
     // MASUKKAN URL WEB APP GOOGLE APPS SCRIPT
     // ==========================================
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbzfcZVeWe4dMOZ4EC4-wcPs0SyFw49hexsrfRn_Gu2v9FbFKwOsCcKCtqMe7K3t1noC/exec"; 
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbxRrop5ExtYD_f32HXhsfk9t7g382IA3FBrAEgKvkR83DUTPFEfStRM8nLwydMYVY76/exec"; 
 
     let emailCache = new Set();
     let savedTemplateConfig = ""; 
@@ -412,7 +412,7 @@
         
         let statusBadge = '';
         if (now < agendaTime) {
-            statusBadge = `<span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-[10px] font-bold uppercase ml-2 animate-pulse shadow-sm">⏳ Segera</span>`;
+            statusBadge = `<span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-[10px] font-bold uppercase ml-2 animate-pulse shadow-sm border border-blue-200">⏳ Segera</span>`;
         } else if (now >= agendaTime && now <= (agendaTime + duration)) {
             statusBadge = `<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded text-[10px] font-bold uppercase ml-2 animate-pulse shadow-sm border border-green-200">🟢 Berlangsung</span>`;
         } else {
@@ -458,7 +458,7 @@
 
     function copyTxt(text) { navigator.clipboard.writeText(text).then(() => Swal.fire({ toast: true, position: 'top-end', showConfirmButton: false, timer: 1500, icon: 'success', title: 'Tersalin!' })); }
 
-    // --- DAFTAR HADIR LOGIC DENGAN INFO WAKTU & FILE UPLOAD ---
+    // --- DAFTAR HADIR LOGIC DENGAN LOGIKA UPLOAD TERPISAH ---
     async function checkAbsensiStatus() {
       showLoading('Memeriksa...');
       const res = await fetchAPI('cekTimer');
@@ -486,7 +486,7 @@
       if(res.data) res.data.forEach(row => emailCache.add(row[3].toLowerCase().trim()));
     }
 
-    async function submitHadir(e) {
+    async function submitHadirTeks(e) {
       e.preventDefault();
       const inputEmail = document.getElementById('h-email').value.toLowerCase().trim();
       
@@ -504,30 +504,43 @@
           return Swal.fire('Peringatan', 'Ukuran file terlalu besar! Maksimal 3MB.', 'warning');
       }
 
-      showLoading('Menyimpan Data & Mengunggah Bukti...');
+      showLoading('Menyimpan Data...');
       
-      const reader = new FileReader();
-      reader.onload = async function(event) {
-          const base64Data = event.target.result.split(',')[1];
+      // 1. KIRIM DATA TEKS DULU (Sangat Cepat)
+      const dataText = [ 
+          document.getElementById('h-nama').value, 
+          document.getElementById('h-instansi').value, 
+          inputEmail, 
+          document.getElementById('h-hp').value, 
+          document.getElementById('h-auto-email').checked 
+      ];
+      
+      const resTeks = await fetchAPI('hadirTeks', { data: dataText }, 'POST');
+      
+      if (resTeks.success) { 
+          emailCache.add(inputEmail); 
+          loadStats(); 
+          document.getElementById('form-hadir').reset(); 
+          navTo('home');
+          Swal.fire('Berhasil!', resTeks.message, 'success');
           
-          const data = [ document.getElementById('h-nama').value, document.getElementById('h-instansi').value, inputEmail, document.getElementById('h-hp').value, document.getElementById('h-auto-email').checked ];
-          
-          const res = await fetchAPI('hadir', { 
-              data: data, 
-              fileData: base64Data, 
-              fileName: file.name, 
-              fileMimeType: file.type 
-          }, 'POST');
-          
-          if (res.success) { 
-            emailCache.add(inputEmail); 
-            loadStats(); 
-            Swal.fire('Berhasil!', res.message, 'success').then(() => { document.getElementById('form-hadir').reset(); navTo('home'); });
-          } else {
-            Swal.fire('Gagal', res.message, 'warning');
-          }
-      };
-      reader.readAsDataURL(file);
+          // 2. KIRIM FILE GAMBAR DI BACKGROUND SECARA ASYNCHRONOUS
+          const reader = new FileReader();
+          reader.onload = async function(event) {
+              const base64Data = event.target.result.split(',')[1];
+              // Background upload, pengguna tidak perlu menunggu ini selesai untuk bisa lanjut
+              fetchAPI('uploadBukti', { 
+                  email: inputEmail,
+                  fileData: base64Data, 
+                  fileName: file.name, 
+                  fileMimeType: file.type 
+              }, 'POST', 3); // 3x Retry jika error
+          };
+          reader.readAsDataURL(file);
+
+      } else {
+          Swal.fire('Gagal', resTeks.message, 'warning');
+      }
     }
 
     async function submitDownload(e) {
@@ -557,6 +570,7 @@
       }
     }
 
+    // MUAT KONFIGURASI TEMPLATE TERAKHIR
     function muatKonfigurasiTerakhir() {
         if(!savedTemplateConfig) return Swal.fire('Info', 'Belum ada pengaturan template yang tersimpan sebelumnya.', 'info');
         try {
@@ -569,6 +583,7 @@
 
     async function saveSettings() {
       showLoading('Menyimpan...');
+      // Ambil Konfigurasi Template saat ini untuk disimpan ke server
       const currentConfigStr = JSON.stringify(els);
       const res = await fetchAPI('simpanSettings', { 
           start: document.getElementById('t-start').value, 
@@ -790,8 +805,17 @@
         let html = '';
         dbPeserta.forEach((row, i) => { 
           let emailFlags = `Email: ${row[5] === "Ya" ? "Minta" : "-"} | ${row[6] === "Terkirim" ? "Terkirim" : "Belum"}`;
-          let buktiLink = row[8] ? `<a href="${row[8]}" target="_blank" class="text-blue-500 underline hover:text-blue-700">Lihat Foto</a>` : `<span class="text-red-400">Tidak ada</span>`;
-          html += `<tr class="border-b"><td class="p-3"><input type="checkbox" class="chk-peserta rounded" value="${i}"></td><td class="p-3 font-bold">${row[1]}<div class="text-[10px] font-normal text-slate-400">${emailFlags}</div></td><td class="p-3 font-mono text-[11px]">${buktiLink}</td></tr>`; 
+          
+          let statusBukti = "";
+          if (row[8]) {
+              if (row[8] === "Mengunggah...") statusBukti = `<span class="text-amber-500 animate-pulse">Mengunggah...</span>`;
+              else if (row[8] === "Gagal Upload") statusBukti = `<span class="text-red-500">Gagal Upload</span>`;
+              else statusBukti = `<a href="${row[8]}" target="_blank" class="text-blue-500 underline hover:text-blue-700">Lihat Foto</a>`;
+          } else {
+              statusBukti = `<span class="text-red-400">Tidak ada</span>`;
+          }
+
+          html += `<tr class="border-b"><td class="p-3"><input type="checkbox" class="chk-peserta rounded" value="${i}"></td><td class="p-3 font-bold">${row[1]}<div class="text-[10px] font-normal text-slate-400">${emailFlags}</div></td><td class="p-3 font-mono text-[11px]">${statusBukti}</td></tr>`; 
         });
         document.getElementById('table-peserta').innerHTML = html;
       } catch (e) { document.getElementById('table-peserta').innerHTML = `<tr><td colspan="3" class="text-center p-6 text-red-500 font-bold">Error.</td></tr>`; }
