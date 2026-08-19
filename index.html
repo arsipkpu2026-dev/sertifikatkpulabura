@@ -866,7 +866,7 @@
       
       const checks = document.querySelectorAll('.chk-peserta:checked');
       if (checks.length === 0) return Swal.fire('Peringatan', 'Pilih minimal 1 peserta.', 'warning');
-      const modeNomor = document.getElementById('s-tipe-nomor').value, kodeFormat = document.getElementById('s-kode').value || '';
+      const modeNomor = document.getElementById('s-tipe-nomor').value, kodeFormat = document.getElementById('s-kode').value || '/HM.06-Kt/1223/2/2026';
       
       showLoading(`Mengunduh Font Tambahan...`);
       for (let key of Object.keys(els)) { let fName = els[key].font; if(fName !== 'Arial' && fName !== 'Times' && fName !== 'Courier') await getCustomFontData(fName); }
@@ -925,7 +925,7 @@
                 firstPage.drawText(nomorSertifikat, { x: nox, y: height - ((els.nomor.y + (els.nomor.h/2)) * scaleY) - yOffsetNomor, size: els.nomor.size * scaleY, font: fNomor, color: rgb(0, 0, 0) });
 
                 const pdfBytes = await pdfDoc.saveAsBase64({ dataUri: true });
-                const res = await fetchAPI('simpanPdf', { base64Data: pdfBytes, filename: fileName }, 'POST'); 
+                const res = await fetchAPI('simpanPdf', { base64Data: pdfBytes, filename: fileName }, 'POST', 0);
                 if(res.success) successCount++;
             } catch (err) {}
           }
@@ -959,7 +959,7 @@
             pdf.setFontSize(els.nomor.size); pdf.text(nomorSertifikat, nox, els.nomor.y + (els.nomor.h/2), { align: els.nomor.align, baseline: 'middle' });
             
             try { 
-              const res = await fetchAPI('simpanPdf', { base64Data: pdf.output('datauristring'), filename: fileName }, 'POST'); 
+              const res = await fetchAPI('simpanPdf', { base64Data: pdf.output('datauristring'), filename: fileName }, 'POST', 0);
               if(res.success) successCount++; 
             } catch (err) {}
           }
