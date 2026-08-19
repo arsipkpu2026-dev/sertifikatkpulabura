@@ -289,7 +289,7 @@
                 <label class="block text-[10px] font-bold">Sumber Nomor</label>
                 <select id="s-tipe-nomor" class="w-full border p-2 rounded-lg text-xs" onchange="toggleKodeInput()"><option value="otomatis">Urut Otomatis</option><option value="manual">Manual Kolom Sheet</option></select>
               </div>
-              <div id="kode-container"><label class="block text-[10px] font-bold">Format Kode</label><input type="text" id="s-kode" placeholder="/HM.06-Kt/1223/2/2026" class="w-full border p-2 rounded-lg text-xs font-mono"></div>
+              <div id="kode-container"><label class="block text-[10px] font-bold">Format Kode</label><input type="text" id="s-kode" placeholder="/HM.07-Kt/1223/2/2026" class="w-full border p-2 rounded-lg text-xs font-mono"></div>
               <div class="sm:col-span-2"><label class="block text-[10px] font-bold">Email Administrator</label><input type="email" id="a-email" placeholder="admin@kpu.go.id" class="w-full border p-2 rounded-lg text-xs"></div>
             </div>
             <button onclick="saveSettings()" class="w-full bg-blue-600 text-white font-bold py-2.5 rounded-lg text-xs transition active:scale-95">Simpan Pengaturan</button>
@@ -322,7 +322,7 @@
     // ==========================================
     // MASUKKAN URL WEB APP GOOGLE APPS SCRIPT
     // ==========================================
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbyDoZmshg7r1CUuXILRKjXlxRIUuAByynj9ScGOi3H-y-gycwlix6vgTyaTtUt-CVCT/exec"; 
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbxCdXK8KrrTxtC5rMsQgFxEaYHMv1R1lgn3lPuanFazpXpmeIumO2vALek-XeNtik9z/exec"; 
 
     let emailCache = new Set();
     let savedTemplateConfig = ""; 
@@ -593,7 +593,7 @@
       if(res) { 
           document.getElementById('t-start').value = res.start||''; 
           document.getElementById('t-end').value = res.end||''; 
-          document.getElementById('s-kode').value = res.kode||'/HM.06-Kt/1223/2/2026'; 
+          document.getElementById('s-kode').value = res.kode||'/HM.07-Kt/1223/2/2026'; 
           document.getElementById('a-email').value = res.adminEmail||'';
           savedTemplateConfig = res.templateConfig || "";
       }
@@ -665,7 +665,7 @@
     let isDragging = false; let activeEl = 'nama'; 
     let els = {
       nama: { x: 50, y: 50, w: 300, h: 50, size: 55, font: 'Pacifico', weight: 'normal', align: 'center', text: '[NAMA PESERTA]' },
-      nomor: { x: 50, y: 150, w: 250, h: 30, size: 13, font: 'Poppins', weight: 'bold', align: 'left', text: 'Nomor : 1/HM.06-Kt/1223/2/2026' }
+      nomor: { x: 50, y: 150, w: 250, h: 30, size: 13, font: 'Poppins', weight: 'bold', align: 'left', text: 'Nomor : 1/HM.07-Kt/1223/2/2026' }
     };
 
     function changeCanvasElement() { 
@@ -866,7 +866,7 @@
       
       const checks = document.querySelectorAll('.chk-peserta:checked');
       if (checks.length === 0) return Swal.fire('Peringatan', 'Pilih minimal 1 peserta.', 'warning');
-      const modeNomor = document.getElementById('s-tipe-nomor').value, kodeFormat = document.getElementById('s-kode').value || '/HM.06-Kt/1223/2/2026';
+      const modeNomor = document.getElementById('s-tipe-nomor').value, kodeFormat = document.getElementById('s-kode').value || '/HM.07-Kt/1223/2/2026';
       
       showLoading(`Mengunduh Font Tambahan...`);
       for (let key of Object.keys(els)) { let fName = els[key].font; if(fName !== 'Arial' && fName !== 'Times' && fName !== 'Courier') await getCustomFontData(fName); }
