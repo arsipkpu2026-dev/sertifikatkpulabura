@@ -52,7 +52,10 @@
         <!-- BANTUAN & ADMIN NAV -->
         <div class="flex items-center gap-2">
           <!-- Tombol Bantuan -->
-          <button onclick="klikBantuanWA()" class="text-[10px] md:text-xs font-bold bg-green-50 text-green-600 px-3 py-2 rounded-xl border border-green-200 shadow-sm hover:bg-green-100 active:scale-95 transition flex items-center gap-1" title="Bantuan via WhatsApp">📱 <span class="hidden sm:inline">WA Admin</span></button>
+          <button onclick="klikBantuanWA()" class="text-[10px] md:text-xs font-bold bg-green-50 text-green-600 px-3 py-2 rounded-xl border border-green-200 shadow-sm hover:bg-green-100 active:scale-95 transition flex items-center gap-1.5" title="Bantuan via WhatsApp">
+            <svg viewBox="0 0 24 24" class="w-4 h-4 fill-current"><path d="M12.031 21.172a9.13 9.13 0 0 1-4.66-1.275l-.335-.198-3.465.91 1.044-3.376-.217-.346A9.098 9.098 0 0 1 2.923 12c0-5.02 4.08-9.1 9.108-9.1a9.08 9.08 0 0 1 6.438 2.668 9.08 9.08 0 0 1 2.67 6.44c-.002 5.018-4.08 9.099-9.108 9.164zm-5.632-3.136c1.378.816 3.107 1.258 4.673 1.258 4.646 0 8.428-3.782 8.428-8.428a8.38 8.38 0 0 0-2.466-5.945A8.385 8.385 0 0 0 11.08 2.457c-4.647 0-8.428 3.78-8.428 8.428 0 1.57.433 3.103 1.254 4.469l-.687 2.22 2.27-.596h.001l-.09-.114zm6.91-2.906c-.198 0-.564-.099-1.636-.545-1.071-.446-2.527-1.488-3.32-2.433-.794-.945-.992-1.785-.992-2.677s.496-1.737.744-1.935c.248-.198.496-.198.694-.198.198 0 .447.05.645.496.198.446.645 1.636.694 1.735.05.099.099.248.05.446-.05.198-.099.297-.198.496-.099.198-.198.397-.298.496-.099.099-.198.198-.099.397.099.198.446.843.992 1.289.446.347.892.595 1.09.744.198.149.347.198.496.099.149-.099.496-.545.694-.744.198-.198.397-.149.694-.05.297.099 1.834.892 2.132 1.041.297.149.496.248.545.397.05.149.05.595-.149 1.14-.198.545-1.09 1.09-1.636 1.09z"/></svg> 
+            <span class="hidden sm:inline">WA Admin</span>
+          </button>
           <button onclick="klikBantuanEmail()" class="text-[10px] md:text-xs font-bold bg-blue-50 text-blue-600 px-3 py-2 rounded-xl border border-blue-200 shadow-sm hover:bg-blue-100 active:scale-95 transition flex items-center gap-1" title="Bantuan via Email">📧 <span class="hidden sm:inline">Email Admin</span></button>
           
           <!-- Tombol Admin -->
@@ -199,7 +202,9 @@
               <select id="el-select" class="w-full border p-2.5 rounded-xl text-sm font-bold" onchange="changeCanvasElement()">
                 <option value="nama">Nama Peserta</option><option value="nomor">Nomor Sertifikat</option>
               </select>
-              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3">
+              <div class="grid grid-cols-2 sm:grid-cols-6 gap-3 mt-3 items-end">
+                <div><label class="block text-[10px] font-bold mb-1">X (Posisi Mendatar)</label><input type="number" id="coord-x" class="w-full border p-2 rounded-xl text-sm" onchange="updateElementStyle()"></div>
+                <div><label class="block text-[10px] font-bold mb-1">Y (Posisi Menurun)</label><input type="number" id="coord-y" class="w-full border p-2 rounded-xl text-sm" onchange="updateElementStyle()"></div>
                 <div><label class="block text-[10px] font-bold mb-1">Size</label><input type="number" id="font-size" class="w-full border p-2 rounded-xl text-sm" onchange="updateElementStyle()"></div>
                 <div>
                   <label class="block text-[10px] font-bold mb-1">Font</label>
@@ -395,7 +400,7 @@
     // ==========================================
     // MASUKKAN URL WEB APP GOOGLE APPS SCRIPT
     // ==========================================
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbxd5Z8WHF7WMPHMzMLbQJMq3gvTm6XGVcXR4sbwvGmGxtvP3TYapCXlp3uUAG74rxCz/exec"; 
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbxeYkY6BEZ39h2PHgMDk76tlsJAmxaYWgkL5iKdvqOwX56PASLY-uDzR7ZYH-ZocYfb/exec"; 
 
     let savedTemplateConfig = ""; 
     let currentDownloadType = 1; 
@@ -427,7 +432,8 @@
     function tempelWatermark(elemen) {
       if(!elemen || elemen.querySelector('.watermark-overlay')) return;
       elemen.style.pointerEvents = 'none';
-      elemen.style.filter = 'grayscale(80%) opacity(70%)';
+      // MENGURANGI KEGELAPAN WATERMARK
+      elemen.style.filter = 'grayscale(30%) opacity(85%)';
       elemen.innerHTML += `<div class='watermark-overlay absolute inset-0 flex items-center justify-center z-20 overflow-hidden bg-white/20 backdrop-blur-[2px] rounded-[1.5rem]'><div class='text-lg md:text-2xl font-black text-slate-800/60 border-2 border-slate-800/60 rounded-xl px-4 py-1.5 rotate-[-15deg] select-none shadow-sm'>BELUM DIBUKA</div></div>`;
     }
 
@@ -591,15 +597,20 @@
       if(res) { 
           document.getElementById('h-mode').value = res.hMode || 'Timer'; document.getElementById('h-start').value = res.hStart || ''; document.getElementById('h-end').value = res.hEnd || ''; document.getElementById('h-msg').value = res.hMsg || ''; 
           document.getElementById('b2-mode').value = res.b2Mode || 'Tutup'; document.getElementById('b2-start').value = res.b2Start || ''; document.getElementById('b2-end').value = res.b2End || ''; document.getElementById('b2-msg').value = res.b2Msg || ''; 
-          document.getElementById('s-kode').value = res.kode || '/HM.07-Kt/1223/2/2026'; document.getElementById('a-email').value = res.adminEmail || ''; savedTemplateConfig = res.templateConfig || "";
+          document.getElementById('s-kode').value = res.kode || '/HM.07-Kt/1223/2/2026'; document.getElementById('a-email').value = res.adminEmail || '';
           document.getElementById('btn-bantuan-mode-wa').value = res.bantuanModeWa || 'Buka'; document.getElementById('btn-bantuan-wa').value = res.bantuanWa || ''; 
           document.getElementById('btn-bantuan-mode-email').value = res.bantuanModeEmail || 'Buka'; document.getElementById('btn-bantuan-email').value = res.bantuanEmail || '';
+          
+          savedTemplateConfig = res.templateConfig || "";
+          // COBA MUAT LOCAL STORAGE DULU, JIKA ADA PERUBAHAN YANG BELUM DISIMPAN
+          let localConfig = localStorage.getItem('localTemplateConfig');
+          if (localConfig) { els = JSON.parse(localConfig); changeCanvasElement(); previewCanvas(); }
       }
     }
 
     function muatKonfigurasiTerakhir() {
-        if(!savedTemplateConfig) return Swal.fire('Info', 'Belum ada pengaturan template yang tersimpan sebelumnya.', 'info');
-        try { els = JSON.parse(savedTemplateConfig); changeCanvasElement(); previewCanvas(); Swal.fire({toast: true, position: 'top-end', showConfirmButton: false, timer: 1500, icon: 'success', title: 'Dimuat!'}); } 
+        if(!savedTemplateConfig) return Swal.fire('Info', 'Belum ada pengaturan template yang tersimpan di server.', 'info');
+        try { els = JSON.parse(savedTemplateConfig); localStorage.setItem('localTemplateConfig', savedTemplateConfig); changeCanvasElement(); previewCanvas(); Swal.fire({toast: true, position: 'top-end', showConfirmButton: false, timer: 1500, icon: 'success', title: 'Dimuat dari server!'}); } 
         catch(e) { console.error("Error parse JSON template"); }
     }
 
@@ -612,7 +623,12 @@
           bantuanModeWa: document.getElementById('btn-bantuan-mode-wa').value, bantuanWa: document.getElementById('btn-bantuan-wa').value,
           bantuanModeEmail: document.getElementById('btn-bantuan-mode-email').value, bantuanEmail: document.getElementById('btn-bantuan-email').value
       }, 'POST');
-      if(res.success) { savedTemplateConfig = currentConfigStr; Swal.fire('Tersimpan', 'Semua pengaturan berhasil disimpan.', 'success'); loadStats(); }
+      if(res.success) { 
+          savedTemplateConfig = currentConfigStr; 
+          localStorage.removeItem('localTemplateConfig'); // Hapus local storage jika sudah sukses tersimpan ke server
+          Swal.fire('Tersimpan', 'Semua pengaturan berhasil disimpan.', 'success'); 
+          loadStats(); 
+      }
     }
 
     async function changePassword() {
@@ -658,8 +674,33 @@
       nomor: { x: 50, y: 150, w: 250, h: 30, size: 13, font: 'Poppins', weight: 'bold', align: 'left', text: 'Nomor : 1/HM.07-Kt/1223/2/2026' }
     };
 
-    function changeCanvasElement() { activeEl = document.getElementById('el-select').value; if(!els[activeEl]) return; document.getElementById('font-size').value = els[activeEl].size; document.getElementById('font-align').value = els[activeEl].align; document.getElementById('font-family').value = els[activeEl].font; document.getElementById('font-weight').value = els[activeEl].weight || 'bold'; previewCanvas(); }
-    function updateElementStyle() { if(!els[activeEl]) return; els[activeEl].size = parseInt(document.getElementById('font-size').value) || 20; els[activeEl].align = document.getElementById('font-align').value; els[activeEl].font = document.getElementById('font-family').value; els[activeEl].weight = document.getElementById('font-weight').value; previewCanvas(); }
+    function changeCanvasElement() { 
+        activeEl = document.getElementById('el-select').value; 
+        if(!els[activeEl]) return; 
+        document.getElementById('coord-x').value = Math.round(els[activeEl].x);
+        document.getElementById('coord-y').value = Math.round(els[activeEl].y);
+        document.getElementById('font-size').value = els[activeEl].size; 
+        document.getElementById('font-align').value = els[activeEl].align; 
+        document.getElementById('font-family').value = els[activeEl].font; 
+        document.getElementById('font-weight').value = els[activeEl].weight || 'bold'; 
+        previewCanvas(); 
+    }
+    
+    function updateElementStyle() { 
+        if(!els[activeEl]) return; 
+        els[activeEl].x = parseFloat(document.getElementById('coord-x').value) || els[activeEl].x;
+        els[activeEl].y = parseFloat(document.getElementById('coord-y').value) || els[activeEl].y;
+        els[activeEl].size = parseInt(document.getElementById('font-size').value) || 20; 
+        els[activeEl].align = document.getElementById('font-align').value; 
+        els[activeEl].font = document.getElementById('font-family').value; 
+        els[activeEl].weight = document.getElementById('font-weight').value; 
+        saveLocalConfig();
+        previewCanvas(); 
+    }
+
+    function saveLocalConfig() {
+        localStorage.setItem('localTemplateConfig', JSON.stringify(els));
+    }
 
     async function loadTemplate(e) {
       const file = e.target.files[0]; if (!file) return; 
@@ -674,14 +715,14 @@
                   let viewport = page.getViewport({ scale: 1.5 }); const tempCanvas = document.createElement('canvas'); const tempCtx = tempCanvas.getContext('2d');
                   tempCanvas.width = viewport.width; tempCanvas.height = viewport.height; tempCtx.fillStyle = '#ffffff'; tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
                   await page.render({ canvasContext: tempCtx, viewport: viewport }).promise;
-                  templateImg.onload = function() { templateType = 'pdf-preview'; canvas.width = templateImg.width; canvas.height = templateImg.height; canvas.style.width = '100%'; if(!savedTemplateConfig) setupDefaultCoords(); document.getElementById('pdf-loading').style.display = 'none'; }; templateImg.src = tempCanvas.toDataURL('image/jpeg', 0.8);
+                  templateImg.onload = function() { templateType = 'pdf-preview'; canvas.width = templateImg.width; canvas.height = templateImg.height; canvas.style.width = '100%'; if(!savedTemplateConfig && !localStorage.getItem('localTemplateConfig')) setupDefaultCoords(); else changeCanvasElement(); document.getElementById('pdf-loading').style.display = 'none'; }; templateImg.src = tempCanvas.toDataURL('image/jpeg', 0.8);
               } catch (error) {
-                  templateType = 'fallback'; canvas.width = 1123; canvas.height = 794; canvas.style.width = '100%'; if(!savedTemplateConfig) setupDefaultCoords(); document.getElementById('pdf-loading').style.display = 'none';
+                  templateType = 'fallback'; canvas.width = 1123; canvas.height = 794; canvas.style.width = '100%'; if(!savedTemplateConfig && !localStorage.getItem('localTemplateConfig')) setupDefaultCoords(); else changeCanvasElement(); document.getElementById('pdf-loading').style.display = 'none';
               }
           }; reader.readAsArrayBuffer(file);
       } else {
           reader.onload = function(event) {
-              templateImg.onload = function() { templateType = 'image'; canvas.width = templateImg.width; canvas.height = templateImg.height; canvas.style.width = '100%'; if(!savedTemplateConfig) setupDefaultCoords(); document.getElementById('pdf-loading').style.display = 'none'; }; templateImg.src = event.target.result;
+              templateImg.onload = function() { templateType = 'image'; canvas.width = templateImg.width; canvas.height = templateImg.height; canvas.style.width = '100%'; if(!savedTemplateConfig && !localStorage.getItem('localTemplateConfig')) setupDefaultCoords(); else changeCanvasElement(); document.getElementById('pdf-loading').style.display = 'none'; }; templateImg.src = event.target.result;
           }; reader.readAsDataURL(file);
       }
     }
@@ -713,13 +754,17 @@
         ctx.fillStyle = isAct ? "#000" : "#475569"; ctx.textBaseline = "middle";
         let textX = el.align === 'center' ? el.x + (el.w / 2) : (el.align === 'right' ? el.x + el.w : el.x);
         ctx.textAlign = el.align; ctx.fillText(el.text, textX, el.y + (el.h / 2));
-        if (isAct) document.getElementById('coord-info').textContent = `[${key.toUpperCase()}] Posisi: X=${Math.round(textX)}, Y=${Math.round(el.y + (el.h / 2))}, Ukuran=${el.size}px`;
+        if (isAct) {
+            document.getElementById('coord-info').textContent = `[${key.toUpperCase()}] Posisi: X=${Math.round(textX)}, Y=${Math.round(el.y + (el.h / 2))}, Ukuran=${el.size}px`;
+            document.getElementById('coord-x').value = Math.round(el.x);
+            document.getElementById('coord-y').value = Math.round(el.y);
+        }
       });
     }
 
     function handleStart(e) { isDragging = true; updateRect(e); } 
     function handleMove(e) { if (isDragging) { updateRect(e); e.preventDefault(); } } 
-    function handleEnd() { isDragging = false; window.snapGuideX = null; window.snapGuideY = null; previewCanvas(); }
+    function handleEnd() { isDragging = false; window.snapGuideX = null; window.snapGuideY = null; saveLocalConfig(); previewCanvas(); }
     canvas.addEventListener('mousedown', handleStart); canvas.addEventListener('mousemove', handleMove); canvas.addEventListener('mouseup', handleEnd);
     canvas.addEventListener('touchstart', handleStart, {passive: false}); canvas.addEventListener('touchmove', handleMove, {passive: false}); canvas.addEventListener('touchend', handleEnd);
     
@@ -775,7 +820,7 @@
     }
 
     async function generateMassal() {
-      if (templateType === 'none' && !savedTemplateConfig) return Swal.fire('Error', 'Upload template PDF/Gambar terlebih dahulu!', 'error');
+      if (templateType === 'none' && !savedTemplateConfig && !localStorage.getItem('localTemplateConfig')) return Swal.fire('Error', 'Upload template PDF/Gambar terlebih dahulu!', 'error');
       const checks = document.querySelectorAll('.chk-peserta:checked');
       if (checks.length === 0) return Swal.fire('Peringatan', 'Pilih minimal 1 peserta.', 'warning');
       const modeNomor = document.getElementById('s-tipe-nomor').value, kodeFormat = document.getElementById('s-kode').value || '/HM.07-Kt/1223/2/2026';
