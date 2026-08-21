@@ -330,7 +330,7 @@
                </div>
             </div>
 
-            <!-- Pengaturan Umum (Sertifikat & Email Laporan) -->
+            <!-- Pengaturan Umum -->
             <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                <h4 class="text-[11px] font-bold text-slate-800 mb-2">Pengaturan Umum</h4>
                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -397,7 +397,7 @@
     // ==========================================
     // MASUKKAN URL WEB APP GOOGLE APPS SCRIPT
     // ==========================================
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbxL9CtKzIYPDlbmr-m5UZP7IQ2Y1d_DOy4agO9wq0uQcp0Ck8Rh961BDoXWtdTpGvpV/exec"; 
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbzMxmh9fL0nrR28hj0SjYYZIoy2sA0l14augkSlD6V9F2XamjQ0TlDBHyyizkWPeJk/exec"; 
 
     let savedTemplateConfig = ""; 
     let currentDownloadType = 1; 
@@ -433,7 +433,8 @@
 
     function klikBantuanWA() {
         if(pengaturanBantuan.modeWa === 'Buka' && pengaturanBantuan.wa) {
-            window.open(`https://wa.me/${pengaturanBantuan.wa}`);
+            let phone = pengaturanBantuan.wa.replace(/\D/g, ''); // Bersihkan karakter kotor
+            window.open(`https://wa.me/${phone}`, '_blank');
         } else {
             Swal.fire({ icon: 'info', title: 'Informasi', text: 'Layanan bantuan WhatsApp tidak tersedia saat ini.', heightAuto: false, customClass: { popup: 'rounded-[1.5rem]' }});
         }
@@ -441,7 +442,7 @@
 
     function klikBantuanEmail() {
         if(pengaturanBantuan.modeEmail === 'Buka' && pengaturanBantuan.email) {
-            window.open(`mailto:${pengaturanBantuan.email}`);
+            window.location.href = `mailto:${pengaturanBantuan.email}`; // Panggil app email secara native
         } else {
             Swal.fire({ icon: 'info', title: 'Informasi', text: 'Layanan bantuan Email tidak tersedia saat ini.', heightAuto: false, customClass: { popup: 'rounded-[1.5rem]' }});
         }
