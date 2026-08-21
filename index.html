@@ -73,10 +73,6 @@
         <div class="text-center mb-6 md:mb-10 bg-white/80 backdrop-blur-xl p-6 md:p-10 rounded-[2rem] shadow-2xl border border-white/50 max-w-md md:max-w-4xl mx-auto w-full">
           <h2 class="text-2xl sm:text-3xl md:text-5xl font-extrabold text-slate-800 tracking-tight drop-shadow-sm">Layanan Mandiri</h2>
           <p class="text-xs sm:text-sm md:text-lg text-slate-600 mt-2 font-semibold">Kelola kehadiran dan akses sertifikat serta informasi kegiatan KPU Kabupaten Labuhanbatu Utara</p>
-          <div class="mt-4 inline-flex items-center gap-3 bg-white/70 backdrop-blur-md px-5 py-2.5 rounded-full border-2 border-emerald-100 shadow-lg">
-            <span class="relative flex h-3.5 w-3.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span><span class="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-500"></span></span>
-            <span class="text-xs md:text-sm font-extrabold text-slate-700 uppercase">Total Pendaftar: <span id="stat-count" class="text-orange-600 mx-1 text-base md:text-xl font-black">0</span> Peserta</span>
-          </div>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 lg:gap-6 w-full max-w-md md:max-w-5xl xl:max-w-7xl mx-auto">
@@ -195,7 +191,7 @@
             <h3 class="text-base lg:text-xl font-extrabold text-slate-800 mb-4 border-b pb-2">1. Konfigurasi Template</h3>
             <div class="mb-4 flex flex-col md:flex-row gap-3">
               <input type="file" id="template-upload" accept="image/png, image/jpeg, application/pdf" class="w-full border p-2 rounded-xl text-xs bg-slate-50 cursor-pointer flex-grow" onchange="loadTemplate(event)">
-              <button onclick="muatKonfigurasiTerakhir()" class="bg-blue-50 text-blue-700 px-4 py-2 rounded-xl border border-blue-200 text-xs font-bold hover:bg-blue-100 transition whitespace-nowrap active:scale-95">Muat Pengaturan Terakhir</button>
+              <button onclick="muatKonfigurasiTerakhir()" class="bg-blue-50 text-blue-700 px-4 py-2 rounded-xl border border-blue-200 text-xs font-bold hover:bg-blue-100 transition whitespace-nowrap active:scale-95">Muat Template Tersimpan</button>
             </div>
             
             <div class="mb-4 bg-blue-50 p-4 rounded-xl border border-blue-100">
@@ -238,6 +234,7 @@
                 <canvas id="cert-canvas"></canvas>
             </div>
             <p class="text-[11px] font-mono bg-slate-800 text-green-400 p-3 rounded-xl border border-slate-700 shadow-inner" id="coord-info">Koordinat: X=0, Y=0</p>
+            <button onclick="saveSetTemplate()" class="w-full bg-indigo-600 text-white font-bold py-3 mt-3 rounded-xl text-sm transition active:scale-95 shadow-md hover:bg-indigo-700">💾 Simpan Desain & Titik Koordinat ke Server</button>
           </div>
 
           <!-- Data Peserta & Action -->
@@ -302,40 +299,40 @@
         <!-- PENGATURAN AKSES & KEAMANAN -->
         <div class="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
           
-          <!-- Bagian Form, Buku II, dan Umum -->
           <div class="lg:col-span-2 bg-slate-50 p-5 rounded-[1.5rem] border shadow-sm flex flex-col gap-4">
             <h3 class="text-xs font-extrabold text-slate-800 uppercase border-b pb-2 border-slate-200">⚙️ Pengaturan Aplikasi</h3>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                <!-- Pengaturan Daftar Hadir -->
-               <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+               <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col h-full">
                   <h4 class="text-[11px] font-bold text-orange-600 mb-2">Form Daftar Hadir</h4>
-                  <div class="flex flex-col gap-2">
-                     <div><label class="block text-[10px] font-bold text-slate-600">Mode</label><select id="h-mode" class="w-full border border-slate-200 p-2 rounded-lg text-xs bg-slate-50"><option>Buka</option><option>Tutup</option><option>Timer</option></select></div>
+                  <div class="flex flex-col gap-3 flex-grow">
+                     <div><label class="block text-[10px] font-bold text-slate-600">Mode</label>
+                     <select id="h-mode" class="w-full border border-slate-200 p-2 rounded-lg text-xs bg-slate-50"><option value="Timer">Gunakan Timer / Jadwal</option><option value="Buka">Buka Terus (Tanpa Timer)</option></select></div>
                      <div class="grid grid-cols-2 gap-2">
-                        <div><label class="block text-[10px] font-bold text-slate-600">Buka</label><input type="datetime-local" id="h-start" class="w-full border border-slate-200 p-2 rounded-lg text-xs bg-slate-50"></div>
-                        <div><label class="block text-[10px] font-bold text-slate-600">Tutup</label><input type="datetime-local" id="h-end" class="w-full border border-slate-200 p-2 rounded-lg text-xs bg-slate-50"></div>
+                        <div><label class="block text-[10px] font-bold text-slate-600">Waktu Buka</label><input type="datetime-local" id="h-start" class="w-full border border-slate-200 p-2 rounded-lg text-xs bg-slate-50"></div>
+                        <div><label class="block text-[10px] font-bold text-slate-600">Waktu Tutup</label><input type="datetime-local" id="h-end" class="w-full border border-slate-200 p-2 rounded-lg text-xs bg-slate-50"></div>
                      </div>
-                     <div><label class="block text-[10px] font-bold text-slate-600">Pesan Tutup</label><input type="text" id="h-msg" class="w-full border border-slate-200 p-2 rounded-lg text-xs bg-slate-50" placeholder="Maaf, form saat ini ditutup."></div>
+                     <div><label class="block text-[10px] font-bold text-slate-600">Pesan Jika Tutup</label><input type="text" id="h-msg" class="w-full border border-slate-200 p-2 rounded-lg text-xs bg-slate-50" placeholder="Maaf, form saat ini ditutup."></div>
+                     <button onclick="saveSetHadir()" class="mt-auto w-full bg-orange-600 text-white font-bold py-2.5 rounded-lg text-xs transition active:scale-95 shadow-sm hover:bg-orange-700">Simpan Daftar Hadir</button>
                   </div>
                </div>
    
                <!-- Pengaturan Buku II -->
-               <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+               <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col h-full">
                   <h4 class="text-[11px] font-bold text-cyan-600 mb-2">Sertifikat Bedah Buku II</h4>
-                  <div class="flex flex-col gap-2">
-                     <div><label class="block text-[10px] font-bold text-slate-600">Mode</label><select id="b2-mode" class="w-full border border-slate-200 p-2 rounded-lg text-xs bg-slate-50"><option>Buka</option><option>Tutup</option><option>Timer</option></select></div>
-                     <div class="grid grid-cols-2 gap-2">
-                        <div><label class="block text-[10px] font-bold text-slate-600">Buka</label><input type="datetime-local" id="b2-start" class="w-full border border-slate-200 p-2 rounded-lg text-xs bg-slate-50"></div>
-                        <div><label class="block text-[10px] font-bold text-slate-600">Tutup</label><input type="datetime-local" id="b2-end" class="w-full border border-slate-200 p-2 rounded-lg text-xs bg-slate-50"></div>
-                     </div>
-                     <div><label class="block text-[10px] font-bold text-slate-600">Pesan Tutup</label><input type="text" id="b2-msg" class="w-full border border-slate-200 p-2 rounded-lg text-xs bg-slate-50" placeholder="Belum dibuka."></div>
+                  <div class="flex flex-col gap-3 flex-grow">
+                     <div><label class="block text-[10px] font-bold text-slate-600">Mode</label>
+                     <select id="b2-mode" class="w-full border border-slate-200 p-2 rounded-lg text-xs bg-slate-50"><option value="Buka">Buka (Tersedia)</option><option value="Tutup">Tutup (Sembunyikan)</option></select></div>
+                     <div><label class="block text-[10px] font-bold text-slate-600">Pesan Jika Ditutup</label><input type="text" id="b2-msg" class="w-full border border-slate-200 p-2 rounded-lg text-xs bg-slate-50" placeholder="Belum dibuka."></div>
+                     <button onclick="saveSetBuku2()" class="mt-auto w-full bg-cyan-600 text-white font-bold py-2.5 rounded-lg text-xs transition active:scale-95 shadow-sm hover:bg-cyan-700">Simpan Buku II</button>
                   </div>
                </div>
             </div>
 
             <!-- Pengaturan Umum (Sertifikat & Email Laporan) -->
             <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+               <h4 class="text-[11px] font-bold text-slate-800 mb-2">Pengaturan Umum</h4>
                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
                     <label class="block text-[10px] font-bold text-slate-600">Nomor Sertifikat</label>
@@ -344,9 +341,8 @@
                   <div id="kode-container" class="sm:col-span-2"><label class="block text-[10px] font-bold text-slate-600">Format Kode Otomatis</label><input type="text" id="s-kode" placeholder="/HM.07-Kt/1223/2/2026" class="w-full border border-slate-200 p-2 rounded-lg text-xs font-mono bg-slate-50"></div>
                   <div class="sm:col-span-3"><label class="block text-[10px] font-bold text-slate-600">Email Admin (Penerima Laporan Sukses TTE)</label><input type="email" id="a-email" placeholder="admin@kpu.go.id" class="w-full border border-slate-200 p-2 rounded-lg text-xs bg-slate-50"></div>
                </div>
+               <button onclick="saveSetUmum()" class="mt-4 w-full bg-slate-800 text-white font-bold py-2.5 rounded-lg text-xs transition active:scale-95 shadow-sm hover:bg-slate-700">Simpan Pengaturan Umum</button>
             </div>
-
-            <button onclick="saveSettings()" class="w-full bg-blue-600 text-white font-bold py-3.5 rounded-xl text-sm transition active:scale-95 shadow-md hover:bg-blue-700 mt-auto">Simpan Semua Pengaturan</button>
           </div>
           
           <!-- Kolom Bantuan & Password -->
@@ -367,6 +363,7 @@
                        <label class="block text-[10px] font-bold text-slate-600 mb-1">Email Bantuan</label>
                        <input type="email" id="btn-bantuan-email" class="w-full border border-slate-200 p-2 rounded-lg text-xs bg-slate-50">
                    </div>
+                   <button onclick="saveSetBantuan()" class="mt-1 w-full bg-blue-600 text-white font-bold py-2.5 rounded-lg text-xs transition active:scale-95 shadow-sm hover:bg-blue-700">Simpan Bantuan</button>
                 </div>
              </div>
 
@@ -390,7 +387,7 @@
     <!-- FOOTER -->
     <footer class="bg-slate-900/90 backdrop-blur text-white text-center py-4 flex-none border-t border-white/10 mt-auto">
       <p class="text-[13px] md:text-sm font-semibold tracking-wide">&copy; <span id="year"></span> KPU Kabupaten Labuhanbatu Utara.</p>
-      <p class="text-[10px] md:text-[11px] text-slate-400 mt-1 normal-case tracking-widest font-bold">v.0.0.13-Beta</p>
+      <p class="text-[10px] md:text-[11px] text-slate-400 mt-1 normal-case tracking-widest font-bold">v.0.0.14-Beta</p>
     </footer>
   </div>
 
@@ -400,22 +397,20 @@
     // ==========================================
     // MASUKKAN URL WEB APP GOOGLE APPS SCRIPT
     // ==========================================
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbwlTJ_DHbjr2_eaAaImGyWbS60S7YHvIZ9JZ4eEFy2ZX9-B2GqJMF6J_8fohg0k5VE3/exec"; 
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbxL9CtKzIYPDlbmr-m5UZP7IQ2Y1d_DOy4agO9wq0uQcp0Ck8Rh961BDoXWtdTpGvpV/exec"; 
 
     let savedTemplateConfig = ""; 
     let currentDownloadType = 1; 
     let pengaturanBantuan = { modeWa: 'Tutup', wa: '', modeEmail: 'Tutup', email: '' };
 
-    window.addEventListener('DOMContentLoaded', (event) => { loadStats(); });
+    window.addEventListener('DOMContentLoaded', (event) => { loadAppStatus(); });
 
     function toggleKodeInput() { document.getElementById('kode-container').style.display = document.getElementById('s-tipe-nomor').value === 'otomatis' ? 'block' : 'none'; }
 
-    async function loadStats() { 
+    async function loadAppStatus() { 
       try { 
-        const res = await fetchAPI('getStats'); 
+        const res = await fetchAPI('getAppStatus'); 
         if (res.success) {
-          document.getElementById('stat-count').innerText = res.count; 
-          
           const divHadir = document.getElementById('menu-hadir-card');
           if(!res.status.hadir.isOpen) tempelWatermark(divHadir);
           
@@ -426,7 +421,7 @@
              pengaturanBantuan = res.status.bantuan;
           }
         }
-      } catch (e) { document.getElementById('stat-count').innerText = "0"; } 
+      } catch (e) { console.error("Gagal load status aplikasi."); } 
     }
 
     function tempelWatermark(elemen) {
@@ -483,7 +478,7 @@
       document.getElementById('view-' + view).classList.add('active');
       if(sessionStorage.getItem("admin_logged_in") === "true") { document.getElementById("btn-login-nav").textContent = "Panel Admin"; document.getElementById("btn-logout-nav").classList.remove("hidden"); } 
       else { document.getElementById("btn-login-nav").textContent = "Panel Admin"; document.getElementById("btn-logout-nav").classList.add("hidden"); }
-      if(view === 'home') loadStats();
+      if(view === 'home') loadAppStatus();
     }
 
     async function checkFeatureStatus(fitur) {
@@ -571,7 +566,7 @@
       showLoading('Mendaftarkan Kehadiran...');
       const dataText = [ document.getElementById('h-nama').value, document.getElementById('h-instansi').value, inputEmail, document.getElementById('h-hp').value, document.getElementById('h-auto-email').checked ];
       const resTeks = await fetchAPI('hadirTeks', { data: dataText }, 'POST');
-      if (resTeks.success) { loadStats(); document.getElementById('form-hadir').reset(); navTo('home'); Swal.fire({title:'Berhasil!', text:resTeks.message, icon:'success', heightAuto:false}); } 
+      if (resTeks.success) { loadAppStatus(); document.getElementById('form-hadir').reset(); navTo('home'); Swal.fire({title:'Berhasil!', text:resTeks.message, icon:'success', heightAuto:false}); } 
       else { Swal.fire({title:'Gagal', text:resTeks.message, icon:'warning', heightAuto:false}); }
     }
 
@@ -595,7 +590,7 @@
       const res = await fetchAPI('getSettings'); 
       if(res) { 
           document.getElementById('h-mode').value = res.hMode || 'Timer'; document.getElementById('h-start').value = res.hStart || ''; document.getElementById('h-end').value = res.hEnd || ''; document.getElementById('h-msg').value = res.hMsg || ''; 
-          document.getElementById('b2-mode').value = res.b2Mode || 'Tutup'; document.getElementById('b2-start').value = res.b2Start || ''; document.getElementById('b2-end').value = res.b2End || ''; document.getElementById('b2-msg').value = res.b2Msg || ''; 
+          document.getElementById('b2-mode').value = res.b2Mode || 'Tutup'; document.getElementById('b2-msg').value = res.b2Msg || ''; 
           document.getElementById('s-kode').value = res.kode || '/HM.07-Kt/1223/2/2026'; document.getElementById('a-email').value = res.adminEmail || '';
           document.getElementById('btn-bantuan-mode-wa').value = res.bantuanModeWa || 'Buka'; document.getElementById('btn-bantuan-wa').value = res.bantuanWa || ''; 
           document.getElementById('btn-bantuan-mode-email').value = res.bantuanModeEmail || 'Buka'; document.getElementById('btn-bantuan-email').value = res.bantuanEmail || '';
@@ -613,21 +608,36 @@
         catch(e) { console.error("Error parse JSON template"); }
     }
 
-    async function saveSettings() {
-      showLoading('Menyimpan...'); const currentConfigStr = JSON.stringify(els);
-      const res = await fetchAPI('simpanSettings', { 
-          hMode: document.getElementById('h-mode').value, hStart: document.getElementById('h-start').value, hEnd: document.getElementById('h-end').value, hMsg: document.getElementById('h-msg').value, 
-          b2Mode: document.getElementById('b2-mode').value, b2Start: document.getElementById('b2-start').value, b2End: document.getElementById('b2-end').value, b2Msg: document.getElementById('b2-msg').value, 
-          kode: document.getElementById('s-kode').value, templateConfig: currentConfigStr, adminEmail: document.getElementById('a-email').value,
-          bantuanModeWa: document.getElementById('btn-bantuan-mode-wa').value, bantuanWa: document.getElementById('btn-bantuan-wa').value,
-          bantuanModeEmail: document.getElementById('btn-bantuan-mode-email').value, bantuanEmail: document.getElementById('btn-bantuan-email').value
-      }, 'POST');
-      if(res.success) { 
-          savedTemplateConfig = currentConfigStr; 
-          localStorage.removeItem('localTemplateConfig'); 
-          Swal.fire({title:'Tersimpan', text:'Semua pengaturan berhasil disimpan.', icon:'success', heightAuto:false}); 
-          loadStats(); 
-      }
+    // --- FUNGSI SIMPAN PENGATURAN TERPISAH (OPTIMASI) ---
+    async function saveSetHadir() {
+        showLoading('Menyimpan Daftar Hadir...');
+        const res = await fetchAPI('simpanSetHadir', { mode: document.getElementById('h-mode').value, start: document.getElementById('h-start').value, end: document.getElementById('h-end').value, msg: document.getElementById('h-msg').value }, 'POST');
+        if(res.success) { Swal.fire({title:'Tersimpan', text:'Pengaturan form Daftar Hadir berhasil disimpan.', icon:'success', heightAuto:false}); loadAppStatus(); }
+    }
+
+    async function saveSetBuku2() {
+        showLoading('Menyimpan Buku II...');
+        const res = await fetchAPI('simpanSetBuku2', { mode: document.getElementById('b2-mode').value, msg: document.getElementById('b2-msg').value }, 'POST');
+        if(res.success) { Swal.fire({title:'Tersimpan', text:'Pengaturan Buku II berhasil disimpan.', icon:'success', heightAuto:false}); loadAppStatus(); }
+    }
+
+    async function saveSetUmum() {
+        showLoading('Menyimpan Pengaturan Umum...');
+        const res = await fetchAPI('simpanSetUmum', { kode: document.getElementById('s-kode').value, adminEmail: document.getElementById('a-email').value }, 'POST');
+        if(res.success) { Swal.fire({title:'Tersimpan', text:'Pengaturan Umum berhasil disimpan.', icon:'success', heightAuto:false}); }
+    }
+
+    async function saveSetBantuan() {
+        showLoading('Menyimpan Bantuan...');
+        const res = await fetchAPI('simpanSetBantuan', { modeWa: document.getElementById('btn-bantuan-mode-wa').value, wa: document.getElementById('btn-bantuan-wa').value, modeEmail: document.getElementById('btn-bantuan-mode-email').value, email: document.getElementById('btn-bantuan-email').value }, 'POST');
+        if(res.success) { Swal.fire({title:'Tersimpan', text:'Pengaturan Tombol Bantuan berhasil disimpan.', icon:'success', heightAuto:false}); loadAppStatus(); }
+    }
+
+    async function saveSetTemplate() {
+        showLoading('Menyimpan Template & Koordinat...');
+        const currentConfigStr = JSON.stringify(els);
+        const res = await fetchAPI('simpanSetTemplate', { templateConfig: currentConfigStr }, 'POST');
+        if(res.success) { savedTemplateConfig = currentConfigStr; localStorage.removeItem('localTemplateConfig'); Swal.fire({title:'Tersimpan', text:'Desain dan titik koordinat tersimpan ke server.', icon:'success', heightAuto:false}); }
     }
 
     async function changePassword() {
@@ -819,9 +829,9 @@
     }
 
     async function generateMassal() {
-      if (templateType === 'none' && !savedTemplateConfig && !localStorage.getItem('localTemplateConfig')) return Swal.fire('Error', 'Upload template PDF/Gambar terlebih dahulu!', 'error');
+      if (templateType === 'none' && !savedTemplateConfig && !localStorage.getItem('localTemplateConfig')) return Swal.fire({title:'Error', text:'Upload template PDF/Gambar terlebih dahulu!', icon:'error', heightAuto:false});
       const checks = document.querySelectorAll('.chk-peserta:checked');
-      if (checks.length === 0) return Swal.fire('Peringatan', 'Pilih minimal 1 peserta.', 'warning');
+      if (checks.length === 0) return Swal.fire({title:'Peringatan', text:'Pilih minimal 1 peserta.', icon:'warning', heightAuto:false});
       const modeNomor = document.getElementById('s-tipe-nomor').value, kodeFormat = document.getElementById('s-kode').value || '/HM.07-Kt/1223/2/2026';
       
       showLoading(`Mengunduh Font...`);
