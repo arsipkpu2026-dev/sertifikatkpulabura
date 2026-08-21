@@ -38,11 +38,11 @@
 <body class="font-sans h-[100dvh] w-screen overflow-hidden flex flex-col select-none relative bg-slate-900 bg-[url('https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center bg-no-repeat">
   <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-[3px] z-0"></div>
 
-  <!-- FLOATING WA SUPPORT BUTTON -->
-  <a href="https://wa.me/" target="_blank" class="fixed bottom-6 md:bottom-8 right-4 md:right-8 bg-green-500/90 backdrop-blur-sm text-white p-3 md:px-5 md:py-3 rounded-full shadow-[0_10px_40px_-10px_rgba(34,197,94,0.6)] hover:-translate-y-1 hover:bg-green-600 transition-all duration-300 z-50 flex items-center gap-2 border-2 border-white/20">
+  <!-- FLOATING SUPPORT BUTTON -->
+  <button id="btn-bantuan" onclick="tampilkanBantuan()" class="hidden fixed bottom-6 md:bottom-8 right-4 md:right-8 bg-green-500/90 backdrop-blur-sm text-white p-3 md:px-5 md:py-3 rounded-full shadow-[0_10px_40px_-10px_rgba(34,197,94,0.6)] hover:-translate-y-1 hover:bg-green-600 transition-all duration-300 z-50 flex items-center gap-2 border-2 border-white/20">
     <span class="text-xl md:text-2xl drop-shadow-md">💬</span>
-    <span class="inline font-bold text-[10px] sm:text-xs md:text-sm tracking-wide">Butuh bantuan? Hubungi Admin</span>
-  </a>
+    <span class="inline font-bold text-[10px] sm:text-xs md:text-sm tracking-wide">Butuh bantuan?</span>
+  </button>
 
   <!-- CONTAINER UTAMA -->
   <div class="relative z-10 flex flex-col h-full w-full">
@@ -75,7 +75,6 @@
           </div>
         </div>
 
-        <!-- MENGGUNAKAN GRID AGAR RAPI DAN TIDAK MELEBAR -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 lg:gap-6 w-full max-w-md md:max-w-5xl xl:max-w-7xl mx-auto">
           
           <div onclick="navToAgenda()" class="group relative bg-gradient-to-br from-blue-600 to-indigo-700 text-white p-5 rounded-[1.5rem] shadow-xl hover:-translate-y-2 transition-all cursor-pointer overflow-hidden border border-blue-400/50">
@@ -86,7 +85,7 @@
             </div>
           </div>
 
-          <div onclick="checkFeatureStatus('hadir')" class="group relative bg-gradient-to-br from-orange-500 to-amber-600 text-white p-5 rounded-[1.5rem] shadow-xl hover:-translate-y-2 transition-all cursor-pointer overflow-hidden border border-orange-400/50">
+          <div id="menu-hadir-card" onclick="checkFeatureStatus('hadir')" class="group relative bg-gradient-to-br from-orange-500 to-amber-600 text-white p-5 rounded-[1.5rem] shadow-xl hover:-translate-y-2 transition-all cursor-pointer overflow-hidden border border-orange-400/50">
             <div class="absolute -right-4 -bottom-4 text-white/10 text-8xl font-black select-none pointer-events-none group-hover:scale-110 transition-transform">📝</div>
             <div class="relative z-10 flex flex-col gap-3">
               <div class="w-14 h-14 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-2xl shadow-inner">📝</div>
@@ -102,7 +101,7 @@
             </div>
           </div>
 
-          <div onclick="checkFeatureStatus('buku2')" class="group relative bg-gradient-to-br from-cyan-600 to-blue-700 text-white p-5 rounded-[1.5rem] shadow-xl hover:-translate-y-2 transition-all cursor-pointer overflow-hidden border border-cyan-500/50">
+          <div id="menu-buku2-card" onclick="checkFeatureStatus('buku2')" class="group relative bg-gradient-to-br from-cyan-600 to-blue-700 text-white p-5 rounded-[1.5rem] shadow-xl hover:-translate-y-2 transition-all cursor-pointer overflow-hidden border border-cyan-500/50">
             <div class="absolute -right-4 -bottom-4 text-white/10 text-8xl font-black select-none pointer-events-none group-hover:scale-110 transition-transform">📘</div>
             <div class="relative z-10 flex flex-col gap-3">
               <div class="w-14 h-14 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-2xl shadow-inner">📘</div>
@@ -185,10 +184,10 @@
         <button onclick="navTo('home')" class="text-xs lg:text-sm text-blue-700 font-bold mb-6 hover:bg-blue-100 bg-blue-50 px-4 py-2 rounded-xl w-fit border border-blue-100 transition active:scale-95">← Kembali</button>
         <h2 class="text-2xl lg:text-4xl font-extrabold text-slate-800 mb-6 tracking-tight border-b pb-4">Dashboard Administrator</h2>
         
-        <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+        <div class="flex flex-col gap-6 w-full">
           
-          <!-- Kiri: Setup Template -->
-          <div class="xl:col-span-7 bg-white p-5 lg:p-8 rounded-[1.5rem] border border-slate-200 shadow-sm flex flex-col">
+          <!-- Konfigurasi Template -->
+          <div class="w-full bg-white p-5 lg:p-8 rounded-[1.5rem] border border-slate-200 shadow-sm flex flex-col">
             <h3 class="text-base lg:text-xl font-extrabold text-slate-800 mb-4 border-b pb-2">1. Konfigurasi Template</h3>
             <div class="mb-4 flex flex-col md:flex-row gap-3">
               <input type="file" id="template-upload" accept="image/png, image/jpeg, application/pdf" class="w-full border p-2 rounded-xl text-xs bg-slate-50 cursor-pointer flex-grow" onchange="loadTemplate(event)">
@@ -228,30 +227,38 @@
                 </div>
               </div>
             </div>
-            <div id="canvas-container" class="mb-3 rounded-xl border shadow-inner flex justify-center relative"><div id="pdf-loading">Memuat Template...</div><canvas id="cert-canvas"></canvas></div>
+            <div id="canvas-container" class="mb-3 rounded-xl border shadow-inner flex justify-center relative w-full overflow-auto" style="min-height: 400px;">
+                <div id="pdf-loading">Memuat Template...</div>
+                <canvas id="cert-canvas"></canvas>
+            </div>
             <p class="text-[11px] font-mono bg-slate-800 text-green-400 p-3 rounded-xl border border-slate-700 shadow-inner" id="coord-info">Koordinat: X=0, Y=0</p>
           </div>
 
-          <!-- Kanan: Data Peserta & Action -->
-          <div class="xl:col-span-5 bg-white p-5 lg:p-8 rounded-[1.5rem] border border-slate-200 shadow-sm flex flex-col">
+          <!-- Data Peserta & Action -->
+          <div class="w-full bg-white p-5 lg:p-8 rounded-[1.5rem] border border-slate-200 shadow-sm flex flex-col">
             <h3 class="text-base lg:text-xl font-extrabold text-slate-800 mb-4 border-b pb-2 flex justify-between items-center">
               2. Data Peserta
               <button onclick="loadDataPeserta()" class="text-[10px] bg-blue-50 text-blue-700 px-3 py-1.5 rounded-lg border border-blue-100 shadow-sm font-bold transition active:scale-95">🔄 Refresh</button>
             </h3>
-            <div class="overflow-x-auto border rounded-xl flex-grow max-h-[350px] custom-scroll">
+            
+            <input type="text" id="search-peserta" placeholder="🔍 Cari Nama atau Email..." onkeyup="filterPeserta()" class="w-full border border-slate-300 p-3 mb-3 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 font-medium">
+
+            <div class="overflow-x-auto border rounded-xl flex-grow max-h-[500px] custom-scroll">
               <table class="w-full text-xs text-left">
-                <thead class="bg-slate-100 sticky top-0 border-b z-10"><tr><th class="p-3 w-8"><input type="checkbox" id="check-all" class="rounded" onchange="toggleCheckAll()"></th><th class="p-3 font-bold">Data (Email & No HP)</th></tr></thead>
-                <tbody id="table-peserta" class="divide-y"><tr><td colspan="2" class="p-6 text-center text-slate-400">Memuat data...</td></tr></tbody>
+                <thead class="bg-slate-100 sticky top-0 border-b z-10">
+                  <tr>
+                    <th class="p-3 w-8"><input type="checkbox" id="check-all" class="rounded" onchange="toggleCheckAll()"></th>
+                    <th class="p-3 w-10 text-center font-bold">No.</th>
+                    <th class="p-3 font-bold">Data (Nama, Email & No HP)</th>
+                  </tr>
+                </thead>
+                <tbody id="table-peserta" class="divide-y"><tr><td colspan="3" class="p-6 text-center text-slate-400">Memuat data...</td></tr></tbody>
               </table>
             </div>
             
             <div class="mt-4 flex flex-col gap-2">
               <button onclick="generateMassal()" class="w-full bg-slate-800 text-white font-black py-3 rounded-xl text-sm transition active:scale-95 shadow-md">1. Buat PDF (Untuk Yang Dicentang)</button>
-              
-              <div class="grid grid-cols-2 gap-2 mt-2">
-                <button onclick="triggerKirimEmail()" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl text-[11px] lg:text-xs transition active:scale-95 shadow-md">📧 Kirim Email (Massal / Centang)</button>
-                <button onclick="triggerKirimWaTerpilih()" class="w-full bg-green-600 text-white font-bold py-3 rounded-xl text-[11px] lg:text-xs transition active:scale-95 shadow-md">📱 Kirim WA (Hanya Centang)</button>
-              </div>
+              <button onclick="triggerKirimEmail()" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl text-[11px] lg:text-xs transition active:scale-95 shadow-md mt-2">📧 Kirim Email (Massal / Centang)</button>
             </div>
           </div>
         </div>
@@ -286,15 +293,6 @@
           </div>
         </div>
         
-        <!-- Manajemen WA Massal Khusus Sheet -->
-        <div class="bg-white p-5 lg:p-6 rounded-[1.5rem] border border-slate-200 shadow-sm mt-6 mb-6">
-          <h3 class="text-base font-extrabold text-slate-800 mb-4 border-b pb-2">5. Pengiriman Broadcast WhatsApp (Dari Sheet "No HP")</h3>
-          <p class="text-xs text-slate-500 mb-4">Membaca data dari Sheet <b>"No HP"</b>. Nomor yang berawalan 08 atau 8 akan diformat otomatis menjadi <b>628...</b> agar sukses terkirim.</p>
-          <textarea id="wa-pesan" placeholder="Contoh: Halo [Nama], terima kasih telah berhadir. Berikut link sertifikat Anda..." class="w-full border p-3 rounded-xl text-xs bg-slate-50 mb-3 h-24"></textarea>
-          <button onclick="prosesKirimWA()" class="w-full bg-green-600 text-white font-bold py-3 rounded-xl text-sm transition active:scale-95">📱 Siapkan Link Pengiriman WA Massal</button>
-          <div id="wa-list" class="mt-4 flex flex-col gap-2 max-h-[300px] overflow-y-auto custom-scroll"></div>
-        </div>
-        
         <!-- Pengaturan Akses & Keamanan -->
         <div class="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div class="lg:col-span-2 bg-slate-50 p-5 rounded-[1.5rem] border shadow-sm flex flex-col gap-4">
@@ -319,6 +317,16 @@
                   <div><label class="block text-[10px] font-bold text-slate-600">Waktu Buka (Opsional)</label><input type="datetime-local" id="b2-start" class="w-full border border-slate-200 p-2 rounded-lg text-xs bg-slate-50"></div>
                   <div><label class="block text-[10px] font-bold text-slate-600">Waktu Tutup (Opsional)</label><input type="datetime-local" id="b2-end" class="w-full border border-slate-200 p-2 rounded-lg text-xs bg-slate-50"></div>
                   <div class="sm:col-span-3"><label class="block text-[10px] font-bold text-slate-600">Pesan Jika Ditutup</label><input type="text" id="b2-msg" class="w-full border border-slate-200 p-2 rounded-lg text-xs bg-slate-50" placeholder="Sertifikat Bedah Buku II belum dibuka."></div>
+               </div>
+            </div>
+
+            <!-- Pengaturan Bantuan -->
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+               <h4 class="text-[11px] font-bold text-green-600 mb-2">Tombol Butuh Bantuan</h4>
+               <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div><label class="block text-[10px] font-bold text-slate-600">Mode</label><select id="btn-bantuan-mode" class="w-full border border-slate-200 p-2 rounded-lg text-xs bg-slate-50"><option>Buka</option><option>Tutup</option></select></div>
+                  <div><label class="block text-[10px] font-bold text-slate-600">Nomor WA Bantuan</label><input type="text" id="btn-bantuan-wa" class="w-full border border-slate-200 p-2 rounded-lg text-xs bg-slate-50" placeholder="6281..."></div>
+                  <div><label class="block text-[10px] font-bold text-slate-600">Email Bantuan</label><input type="email" id="btn-bantuan-email" class="w-full border border-slate-200 p-2 rounded-lg text-xs bg-slate-50"></div>
                </div>
             </div>
 
@@ -354,7 +362,7 @@
     <!-- FOOTER -->
     <footer class="bg-slate-900/90 backdrop-blur text-white text-center py-4 flex-none border-t border-white/10">
       <p class="text-[13px] md:text-sm font-semibold tracking-wide">&copy; <span id="year"></span> KPU Kabupaten Labuhanbatu Utara.</p>
-      <p class="text-[10px] md:text-[11px] text-slate-400 mt-1 normal-case tracking-widest font-bold">v.0.0.11-Beta</p>
+      <p class="text-[10px] md:text-[11px] text-slate-400 mt-1 normal-case tracking-widest font-bold">v.0.0.12-Beta</p>
     </footer>
   </div>
 
@@ -364,22 +372,68 @@
     // ==========================================
     // MASUKKAN URL WEB APP GOOGLE APPS SCRIPT
     // ==========================================
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbxuvf8I77GrLwLEKXEO0f-zFeOBKOIOPs42c-ls1VBkxqwnWRfjPdJx8s6i_Zjs_VxUuA/exec"; 
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbyszAEUKBtTcKustGzaYD285IB08oR34yDw16-t-NgbEKQCFCspZaC7GpgvWn8tYWN8/exec"; 
 
     let savedTemplateConfig = ""; 
     let currentDownloadType = 1; 
+    let pengaturanBantuan = { wa: '', email: '' };
 
     window.addEventListener('DOMContentLoaded', (event) => { loadStats(); });
 
     function toggleKodeInput() { document.getElementById('kode-container').style.display = document.getElementById('s-tipe-nomor').value === 'otomatis' ? 'block' : 'none'; }
 
-    async function loadStats() { try { const res = await fetchAPI('getStats'); if (res.success) document.getElementById('stat-count').innerText = res.count; } catch (e) { document.getElementById('stat-count').innerText = "0"; } }
+    async function loadStats() { 
+      try { 
+        const res = await fetchAPI('getStats'); 
+        if (res.success) {
+          document.getElementById('stat-count').innerText = res.count; 
+          
+          const divHadir = document.getElementById('menu-hadir-card');
+          if(!res.status.hadir.isOpen) tempelWatermark(divHadir);
+          
+          const divBuku2 = document.getElementById('menu-buku2-card');
+          if(!res.status.buku2.isOpen) tempelWatermark(divBuku2);
+
+          const btnBantuan = document.getElementById('btn-bantuan');
+          if(res.status.bantuan.isOpen) {
+             btnBantuan.classList.remove('hidden');
+             pengaturanBantuan = { wa: res.status.bantuan.waktuBuka, email: res.status.bantuan.waktuTutup };
+          } else {
+             btnBantuan.classList.add('hidden');
+          }
+        }
+      } catch (e) { document.getElementById('stat-count').innerText = "0"; } 
+    }
+
+    function tempelWatermark(elemen) {
+      if(!elemen || elemen.querySelector('.watermark-overlay')) return;
+      elemen.style.pointerEvents = 'none';
+      elemen.style.filter = 'grayscale(100%)';
+      elemen.innerHTML += `<div class='watermark-overlay absolute inset-0 flex items-center justify-center z-20 overflow-hidden bg-slate-900/50 backdrop-blur-sm rounded-[1.5rem]'><div class='text-xl md:text-3xl font-black text-white/90 border-4 border-white/90 rounded-xl px-4 py-2 rotate-[-15deg] select-none'>BELUM DIBUKA</div></div>`;
+    }
+
+    function tampilkanBantuan() {
+        Swal.fire({
+            title: 'Butuh Bantuan?',
+            html: `Silakan pilih metode komunikasi:`,
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Kirim Email',
+            denyButtonText: 'Kirim WhatsApp',
+            cancelButtonText: 'Tutup',
+            confirmButtonColor: '#3b82f6', denyButtonColor: '#22c55e',
+            customClass: { popup: 'rounded-[2rem]' }
+        }).then((result) => {
+            if (result.isConfirmed && pengaturanBantuan.email) window.open(`mailto:${pengaturanBantuan.email}`);
+            else if (result.isDenied && pengaturanBantuan.wa) window.open(`https://wa.me/${pengaturanBantuan.wa}`);
+        });
+    }
 
     function showLoading(title = 'Memproses...') {
       Swal.fire({
         title: title,
         html: `<div class="flex flex-col items-center p-3"><img src="https://upload.wikimedia.org/wikipedia/commons/4/46/KPU_Logo.svg" class="w-16 h-16 animate-bounce my-2 drop-shadow-md"><p class="text-xs text-slate-500 font-bold mt-2">Mohon tunggu...</p></div>`,
-        showConfirmButton: false, allowOutsideClick: false, allowEscapeKey: false, customClass: { popup: 'rounded-3xl shadow-2xl' }
+        showConfirmButton: false, allowOutsideClick: false, allowEscapeKey: false, customClass: { popup: 'rounded-[2rem] shadow-2xl' }
       });
     }
 
@@ -432,7 +486,6 @@
         document.getElementById('form-download').reset(); navTo('download');
     }
 
-    // --- AGENDA DENGAN STATUS ZOOM (START & END) ---
     async function navToAgenda() {
       navTo('agenda'); document.getElementById('list-agenda-user').innerHTML = '<p class="text-center text-sm py-4 col-span-2">Memuat...</p>';
       const res = await fetchAPI('getAgenda');
@@ -441,10 +494,8 @@
       let html = '';
       res.data.forEach(row => {
         const waktuStart = new Date(row[2]); const strStart = waktuStart.toLocaleString('id-ID', { dateStyle: 'full', timeStyle: 'short' });
-        // row[8] adalah Waktu Selesai (dikirim saat penambahan dari Admin)
-        const waktuEnd = row[8] ? new Date(row[8]) : new Date(waktuStart.getTime() + (3 * 60 * 60 * 1000)); // Default 3 Jam
+        const waktuEnd = row[8] ? new Date(row[8]) : new Date(waktuStart.getTime() + (3 * 60 * 60 * 1000)); 
         const strEnd = waktuEnd.toLocaleTimeString('id-ID', { timeStyle: 'short' });
-        
         const now = new Date().getTime(); const startMs = waktuStart.getTime(); const endMs = waktuEnd.getTime();
         
         let statusBadge = ''; let opacityStyle = ''; let watermark = '';
@@ -523,6 +574,7 @@
           document.getElementById('h-mode').value = res.hMode || 'Timer'; document.getElementById('h-start').value = res.hStart || ''; document.getElementById('h-end').value = res.hEnd || ''; document.getElementById('h-msg').value = res.hMsg || ''; 
           document.getElementById('b2-mode').value = res.b2Mode || 'Tutup'; document.getElementById('b2-start').value = res.b2Start || ''; document.getElementById('b2-end').value = res.b2End || ''; document.getElementById('b2-msg').value = res.b2Msg || ''; 
           document.getElementById('s-kode').value = res.kode || '/HM.07-Kt/1223/2/2026'; document.getElementById('a-email').value = res.adminEmail || ''; savedTemplateConfig = res.templateConfig || "";
+          document.getElementById('btn-bantuan-mode').value = res.bantuanMode || 'Buka'; document.getElementById('btn-bantuan-wa').value = res.bantuanWa || ''; document.getElementById('btn-bantuan-email').value = res.bantuanEmail || '';
       }
     }
 
@@ -537,9 +589,10 @@
       const res = await fetchAPI('simpanSettings', { 
           hMode: document.getElementById('h-mode').value, hStart: document.getElementById('h-start').value, hEnd: document.getElementById('h-end').value, hMsg: document.getElementById('h-msg').value, 
           b2Mode: document.getElementById('b2-mode').value, b2Start: document.getElementById('b2-start').value, b2End: document.getElementById('b2-end').value, b2Msg: document.getElementById('b2-msg').value, 
-          kode: document.getElementById('s-kode').value, templateConfig: currentConfigStr, adminEmail: document.getElementById('a-email').value
+          kode: document.getElementById('s-kode').value, templateConfig: currentConfigStr, adminEmail: document.getElementById('a-email').value,
+          bantuanMode: document.getElementById('btn-bantuan-mode').value, bantuanWa: document.getElementById('btn-bantuan-wa').value, bantuanEmail: document.getElementById('btn-bantuan-email').value
       }, 'POST');
-      if(res.success) { savedTemplateConfig = currentConfigStr; Swal.fire('Tersimpan', 'Semua pengaturan berhasil disimpan.', 'success'); }
+      if(res.success) { savedTemplateConfig = currentConfigStr; Swal.fire('Tersimpan', 'Semua pengaturan berhasil disimpan.', 'success'); loadStats(); }
     }
 
     async function changePassword() {
@@ -557,7 +610,6 @@
     }
     async function submitAgendaAdmin(e) {
       e.preventDefault(); showLoading('Menyimpan...');
-      // Mengirimkan array lengkap beserta Waktu Selesai di index ke-7
       await fetchAPI('addAgenda', { data: [document.getElementById('a-judul').value, document.getElementById('a-waktu').value, document.getElementById('a-platform').value, document.getElementById('a-link').value, document.getElementById('a-id').value, document.getElementById('a-pass').value, document.getElementById('a-bg').value, document.getElementById('a-waktu-selesai').value] }, 'POST');
       Swal.close(); document.getElementById('form-agenda').reset(); loadAgendaAdmin();
     }
@@ -668,24 +720,31 @@
 
     let dbPeserta = [];
     async function loadDataPeserta() {
-      document.getElementById('table-peserta').innerHTML = '<tr><td colspan="2" class="p-6 text-center text-slate-400 font-medium">Memuat...</td></tr>';
+      document.getElementById('table-peserta').innerHTML = '<tr><td colspan="3" class="p-6 text-center text-slate-400 font-medium">Memuat...</td></tr>';
       try {
         const res = await fetchAPI('getData'); dbPeserta = res.data;
-        if (!dbPeserta || dbPeserta.length === 0) return document.getElementById('table-peserta').innerHTML = '<tr><td colspan="2" class="text-center p-6 font-medium text-slate-500">Kosong</td></tr>'; 
+        if (!dbPeserta || dbPeserta.length === 0) return document.getElementById('table-peserta').innerHTML = '<tr><td colspan="3" class="text-center p-6 font-medium text-slate-500">Kosong</td></tr>'; 
         let html = '';
         dbPeserta.forEach((row, i) => { 
-          // Format HP untuk tampilan admin
           let hpRaw = row[4] ? row[4].toString().replace(/\D/g, '') : '';
-          if (hpRaw.startsWith('8')) hpRaw = "62" + hpRaw; else if (hpRaw.startsWith('08')) hpRaw = "62" + hpRaw.substring(1);
           let txtHp = hpRaw ? `📞 +${hpRaw}` : '📞 -';
-
           let emailFlags = `Email Minta: ${row[5] === "Ya" ? "Ya" : "-"} | Status: <span class="${row[6]==='Terkirim'?'text-green-600 font-bold':''}">${row[6] || 'Belum'}</span>`;
-          html += `<tr class="border-b hover:bg-slate-50 transition"><td class="p-3"><input type="checkbox" class="chk-peserta rounded w-4 h-4 text-blue-600" value="${i}"></td><td class="p-3"><p class="font-bold text-slate-800">${row[1]}</p><div class="text-[10px] font-normal text-slate-500 mt-1">${row[3]}<br>${txtHp}<br>${emailFlags}</div></td></tr>`; 
+          html += `<tr class="border-b hover:bg-slate-50 transition row-peserta"><td class="p-3"><input type="checkbox" class="chk-peserta rounded w-4 h-4 text-blue-600" value="${i}"></td><td class="p-3 text-center font-bold text-slate-600">${i+1}</td><td class="p-3"><p class="font-bold text-slate-800 search-target">${row[1]}</p><div class="text-[10px] font-normal text-slate-500 mt-1 search-target">${row[3]}<br>${txtHp}<br>${emailFlags}</div></td></tr>`; 
         });
         document.getElementById('table-peserta').innerHTML = html;
-      } catch (e) { document.getElementById('table-peserta').innerHTML = `<tr><td colspan="2" class="text-center p-6 text-red-500 font-bold">Error.</td></tr>`; }
+      } catch (e) { document.getElementById('table-peserta').innerHTML = `<tr><td colspan="3" class="text-center p-6 text-red-500 font-bold">Error.</td></tr>`; }
     }
+    
     function toggleCheckAll() { const isChecked = document.getElementById('check-all').checked; document.querySelectorAll('.chk-peserta').forEach(el => el.checked = isChecked); }
+
+    function filterPeserta() {
+        let input = document.getElementById("search-peserta").value.toLowerCase();
+        let rows = document.querySelectorAll(".row-peserta");
+        rows.forEach(row => {
+            let textData = row.innerText.toLowerCase();
+            row.style.display = textData.includes(input) ? "" : "none";
+        });
+    }
 
     const fontUrls = { 'Pacifico': 'https://raw.githubusercontent.com/google/fonts/main/ofl/pacifico/Pacifico-Regular.ttf', 'Poppins': 'https://raw.githubusercontent.com/google/fonts/main/ofl/poppins/Poppins-Bold.ttf' };
     let fontCacheBuffer = {}; let fontCacheBase64 = {};
@@ -775,54 +834,6 @@
           if(res.success) { Swal.fire('Selesai!', res.message, 'success'); loadDataPeserta(); } else Swal.fire('Gagal', res.message, 'error');
         }
       });
-    }
-
-    // --- FITUR WHATSAPP (TERPILIH DARI TABEL) ---
-    function triggerKirimWaTerpilih() {
-        const checks = document.querySelectorAll('.chk-peserta:checked');
-        if (checks.length === 0) return Swal.fire('Peringatan', 'Centang minimal 1 peserta untuk mengirim WA.', 'warning');
-        
-        let html = '';
-        checks.forEach(cb => {
-            let item = dbPeserta[cb.value];
-            let nama = item[1];
-            let hp = item[4] ? item[4].toString().replace(/\D/g, '') : '';
-            
-            if (hp.startsWith('8')) hp = "62" + hp; else if (hp.startsWith('08')) hp = "62" + hp.substring(1);
-            
-            if(hp) {
-                // Gunakan template pesan dasar, bisa diganti di URL nanti jika perlu
-                let waLink = `https://web.whatsapp.com/send?phone=${hp}&text=Halo%20${encodeURIComponent(nama)},`; 
-                html += `<div class="flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-slate-200 mb-2 text-left"><span class="text-xs font-bold text-slate-700">${nama} <br><span class="text-green-600 font-mono">+${hp}</span></span><a href="${waLink}" target="_blank" class="bg-green-500 text-white text-[11px] px-4 py-2 rounded-lg font-bold hover:bg-green-600 shadow-sm transition active:scale-95 whitespace-nowrap ml-2">Kirim WA</a></div>`;
-            } else {
-                html += `<div class="flex justify-between items-center bg-red-50 p-3 rounded-xl border border-red-200 mb-2 text-left"><span class="text-xs font-bold text-red-700">${nama} <br>Tidak ada No HP Valid</span></div>`;
-            }
-        });
-
-        Swal.fire({
-            title: `Kirim WA (${checks.length} Peserta)`,
-            html: `<div class="max-h-[300px] overflow-y-auto custom-scroll mt-2 pr-2">${html}</div>`,
-            showConfirmButton: true, confirmButtonText: 'Tutup', customClass: { popup: 'rounded-[1.5rem]' }
-        });
-    }
-
-    // --- FITUR WHATSAPP MASSAL (DARI SHEET NO HP) ---
-    async function prosesKirimWA() {
-        showLoading('Mengambil data No HP...');
-        const pesan = document.getElementById('wa-pesan').value;
-        const res = await fetchAPI('getWaData');
-        Swal.close();
-        if (res.success && res.data.length > 0) {
-            let html = '';
-            res.data.forEach((item) => {
-                let text = encodeURIComponent(pesan.replace(/\[Nama\]/gi, item.nama));
-                let waLink = `https://web.whatsapp.com/send?phone=${item.hp}&text=${text}`; 
-                html += `<div class="flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-slate-200"><span class="text-xs font-bold text-slate-700">${item.nama} <br><span class="text-green-600 font-mono">+${item.hp}</span></span><a href="${waLink}" target="_blank" class="bg-green-500 text-white text-[11px] px-4 py-2 rounded-lg font-bold hover:bg-green-600 shadow-sm transition active:scale-95 whitespace-nowrap ml-2">Kirim WA</a></div>`;
-            });
-            document.getElementById('wa-list').innerHTML = html;
-        } else {
-            Swal.fire('Info', 'Data Sheet "No HP" kosong atau belum diisi.', 'info');
-        }
     }
 
   </script>
