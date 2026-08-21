@@ -203,8 +203,8 @@
                 <option value="nama">Nama Peserta</option><option value="nomor">Nomor Sertifikat</option>
               </select>
               <div class="grid grid-cols-2 sm:grid-cols-6 gap-3 mt-3 items-end">
-                <div><label class="block text-[10px] font-bold mb-1">X (Posisi Mendatar)</label><input type="number" id="coord-x" class="w-full border p-2 rounded-xl text-sm" onchange="updateElementStyle()"></div>
-                <div><label class="block text-[10px] font-bold mb-1">Y (Posisi Menurun)</label><input type="number" id="coord-y" class="w-full border p-2 rounded-xl text-sm" onchange="updateElementStyle()"></div>
+                <div><label class="block text-[10px] font-bold mb-1">X (Mendatar)</label><input type="number" id="coord-x" class="w-full border p-2 rounded-xl text-sm" onchange="updateElementStyle()"></div>
+                <div><label class="block text-[10px] font-bold mb-1">Y (Menurun)</label><input type="number" id="coord-y" class="w-full border p-2 rounded-xl text-sm" onchange="updateElementStyle()"></div>
                 <div><label class="block text-[10px] font-bold mb-1">Size</label><input type="number" id="font-size" class="w-full border p-2 rounded-xl text-sm" onchange="updateElementStyle()"></div>
                 <div>
                   <label class="block text-[10px] font-bold mb-1">Font</label>
@@ -302,7 +302,7 @@
         <!-- PENGATURAN AKSES & KEAMANAN -->
         <div class="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
           
-          <!-- Bagian Form, Buku II, dan Umum (Lebih Rapi) -->
+          <!-- Bagian Form, Buku II, dan Umum -->
           <div class="lg:col-span-2 bg-slate-50 p-5 rounded-[1.5rem] border shadow-sm flex flex-col gap-4">
             <h3 class="text-xs font-extrabold text-slate-800 uppercase border-b pb-2 border-slate-200">⚙️ Pengaturan Aplikasi</h3>
             
@@ -349,7 +349,7 @@
             <button onclick="saveSettings()" class="w-full bg-blue-600 text-white font-bold py-3.5 rounded-xl text-sm transition active:scale-95 shadow-md hover:bg-blue-700 mt-auto">Simpan Semua Pengaturan</button>
           </div>
           
-          <!-- Kolom Bantuan & Password (Kanan) -->
+          <!-- Kolom Bantuan & Password -->
           <div class="flex flex-col gap-4">
              <!-- Pengaturan Bantuan Header -->
              <div class="bg-slate-50 p-5 rounded-[1.5rem] border shadow-sm">
@@ -388,9 +388,9 @@
     </main>
 
     <!-- FOOTER -->
-    <footer class="bg-slate-900/90 backdrop-blur text-white text-center py-4 flex-none border-t border-white/10">
+    <footer class="bg-slate-900/90 backdrop-blur text-white text-center py-4 flex-none border-t border-white/10 mt-auto">
       <p class="text-[13px] md:text-sm font-semibold tracking-wide">&copy; <span id="year"></span> KPU Kabupaten Labuhanbatu Utara.</p>
-      <p class="text-[10px] md:text-[11px] text-slate-400 mt-1 normal-case tracking-widest font-bold">v.0.0.12-Beta</p>
+      <p class="text-[10px] md:text-[11px] text-slate-400 mt-1 normal-case tracking-widest font-bold">v.0.0.13-Beta</p>
     </footer>
   </div>
 
@@ -400,7 +400,7 @@
     // ==========================================
     // MASUKKAN URL WEB APP GOOGLE APPS SCRIPT
     // ==========================================
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbxeYkY6BEZ39h2PHgMDk76tlsJAmxaYWgkL5iKdvqOwX56PASLY-uDzR7ZYH-ZocYfb/exec"; 
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbwlTJ_DHbjr2_eaAaImGyWbS60S7YHvIZ9JZ4eEFy2ZX9-B2GqJMF6J_8fohg0k5VE3/exec"; 
 
     let savedTemplateConfig = ""; 
     let currentDownloadType = 1; 
@@ -432,16 +432,15 @@
     function tempelWatermark(elemen) {
       if(!elemen || elemen.querySelector('.watermark-overlay')) return;
       elemen.style.pointerEvents = 'none';
-      // MENGURANGI KEGELAPAN WATERMARK
-      elemen.style.filter = 'grayscale(30%) opacity(85%)';
-      elemen.innerHTML += `<div class='watermark-overlay absolute inset-0 flex items-center justify-center z-20 overflow-hidden bg-white/20 backdrop-blur-[2px] rounded-[1.5rem]'><div class='text-lg md:text-2xl font-black text-slate-800/60 border-2 border-slate-800/60 rounded-xl px-4 py-1.5 rotate-[-15deg] select-none shadow-sm'>BELUM DIBUKA</div></div>`;
+      elemen.style.filter = 'grayscale(50%) opacity(80%)';
+      elemen.innerHTML += `<div class='watermark-overlay absolute inset-0 flex items-center justify-center z-20 overflow-hidden bg-slate-900/30 backdrop-blur-[1px] rounded-[1.5rem]'><div class='text-4xl md:text-5xl drop-shadow-lg' title='Belum Dibuka'>🔒</div></div>`;
     }
 
     function klikBantuanWA() {
         if(pengaturanBantuan.modeWa === 'Buka' && pengaturanBantuan.wa) {
             window.open(`https://wa.me/${pengaturanBantuan.wa}`);
         } else {
-            Swal.fire({ icon: 'info', title: 'Informasi', text: 'Layanan bantuan WhatsApp tidak tersedia saat ini.', customClass: { popup: 'rounded-[1.5rem]' }});
+            Swal.fire({ icon: 'info', title: 'Informasi', text: 'Layanan bantuan WhatsApp tidak tersedia saat ini.', heightAuto: false, customClass: { popup: 'rounded-[1.5rem]' }});
         }
     }
 
@@ -449,7 +448,7 @@
         if(pengaturanBantuan.modeEmail === 'Buka' && pengaturanBantuan.email) {
             window.open(`mailto:${pengaturanBantuan.email}`);
         } else {
-            Swal.fire({ icon: 'info', title: 'Informasi', text: 'Layanan bantuan Email tidak tersedia saat ini.', customClass: { popup: 'rounded-[1.5rem]' }});
+            Swal.fire({ icon: 'info', title: 'Informasi', text: 'Layanan bantuan Email tidak tersedia saat ini.', heightAuto: false, customClass: { popup: 'rounded-[1.5rem]' }});
         }
     }
 
@@ -457,7 +456,7 @@
       Swal.fire({
         title: title,
         html: `<div class="flex flex-col items-center p-3"><img src="https://upload.wikimedia.org/wikipedia/commons/4/46/KPU_Logo.svg" class="w-16 h-16 animate-bounce my-2 drop-shadow-md"><p class="text-xs text-slate-500 font-bold mt-2">Mohon tunggu...</p></div>`,
-        showConfirmButton: false, allowOutsideClick: false, allowEscapeKey: false, customClass: { popup: 'rounded-[2rem] shadow-2xl' }
+        showConfirmButton: false, allowOutsideClick: false, allowEscapeKey: false, heightAuto: false, customClass: { popup: 'rounded-[2rem] shadow-2xl' }
       });
     }
 
@@ -476,7 +475,7 @@
 
     document.getElementById('btn-login-nav').addEventListener('click', function(e) {
       if (sessionStorage.getItem("admin_logged_in") === "true") return navTo('admin');
-      if (e.altKey) navTo('login'); else Swal.fire({ icon: 'error', title: 'Dilarang Akses', text: 'Hanya Administrator.', customClass: { popup: 'rounded-2xl' }});
+      if (e.altKey) navTo('login'); else Swal.fire({ icon: 'error', title: 'Dilarang Akses', text: 'Hanya Administrator.', heightAuto: false, customClass: { popup: 'rounded-2xl' }});
     });
 
     function navTo(view) {
@@ -498,9 +497,9 @@
                 let strSelesai = res.hadir.waktuTutup ? new Date(res.hadir.waktuTutup).toLocaleString('id-ID', { dateStyle: 'full', timeStyle: 'short' }) : 'Tidak Terbatas';
                 infoDiv.style.display = 'block'; infoDiv.innerHTML = `📌 <b>Jadwal Pendaftaran:</b><br>Dibuka: <b>${strMulai}</b><br>Ditutup: <b>${strSelesai}</b>`;
              } else { infoDiv.style.display = 'none'; }
-         } else { Swal.fire('Ditutup', res.hadir.message, 'warning'); }
+         } else { Swal.fire({title:'Ditutup', text:res.hadir.message, icon:'warning', heightAuto:false}); }
       } else if (fitur === 'buku2') {
-         if (res.buku2.isOpen) { openDownloadView(2); } else { Swal.fire('Informasi', res.buku2.message, 'info'); }
+         if (res.buku2.isOpen) { openDownloadView(2); } else { Swal.fire({title:'Informasi', text:res.buku2.message, icon:'info', heightAuto:false}); }
       }
     }
 
@@ -564,7 +563,7 @@
       document.getElementById('list-ebook-user').innerHTML = html;
     }
 
-    function copyTxt(text) { navigator.clipboard.writeText(text).then(() => Swal.fire({ toast: true, position: 'top-end', showConfirmButton: false, timer: 1500, icon: 'success', title: 'Tersalin!' })); }
+    function copyTxt(text) { navigator.clipboard.writeText(text).then(() => Swal.fire({ toast: true, position: 'top-end', showConfirmButton: false, timer: 1500, icon: 'success', title: 'Tersalin!', heightAuto: false })); }
 
     async function submitHadirTeks(e) {
       e.preventDefault();
@@ -572,15 +571,15 @@
       showLoading('Mendaftarkan Kehadiran...');
       const dataText = [ document.getElementById('h-nama').value, document.getElementById('h-instansi').value, inputEmail, document.getElementById('h-hp').value, document.getElementById('h-auto-email').checked ];
       const resTeks = await fetchAPI('hadirTeks', { data: dataText }, 'POST');
-      if (resTeks.success) { loadStats(); document.getElementById('form-hadir').reset(); navTo('home'); Swal.fire('Berhasil!', resTeks.message, 'success'); } 
-      else { Swal.fire('Gagal', resTeks.message, 'warning'); }
+      if (resTeks.success) { loadStats(); document.getElementById('form-hadir').reset(); navTo('home'); Swal.fire({title:'Berhasil!', text:resTeks.message, icon:'success', heightAuto:false}); } 
+      else { Swal.fire({title:'Gagal', text:resTeks.message, icon:'warning', heightAuto:false}); }
     }
 
     async function submitDownload(e) {
       e.preventDefault(); showLoading('Mencari...');
       const res = await fetchAPI('download', { nama: document.getElementById('d-nama').value, email: document.getElementById('d-email').value, jenis: currentDownloadType }, 'GET');
-      if (res.success) Swal.fire({ title: 'Ditemukan!', text: res.message, icon: 'success', confirmButtonText: 'Unduh' }).then((r) => { if (r.isConfirmed) window.open(res.url, '_blank'); });
-      else Swal.fire('Gagal', res.message, 'warning');
+      if (res.success) Swal.fire({ title: 'Ditemukan!', text: res.message, icon: 'success', confirmButtonText: 'Unduh', heightAuto: false }).then((r) => { if (r.isConfirmed) window.open(res.url, '_blank'); });
+      else Swal.fire({title:'Gagal', text:res.message, icon:'warning', heightAuto:false});
     }
 
     // --- ADMIN LOGIC ---
@@ -588,7 +587,7 @@
       e.preventDefault(); showLoading('Verifikasi...');
       const res = await fetchAPI('login', { user: document.getElementById('l-user').value, pass: document.getElementById('l-pass').value }, 'GET');
       if (res.success) { sessionStorage.setItem("admin_logged_in", "true"); Swal.close(); navTo('admin'); loadDataPeserta(); loadSettings(); loadAgendaAdmin(); loadEbookAdmin(); } 
-      else Swal.fire('Akses Ditolak', res.message, 'error');
+      else Swal.fire({title:'Akses Ditolak', text:res.message, icon:'error', heightAuto:false});
     }
     function logoutAdmin() { sessionStorage.removeItem("admin_logged_in"); navTo('home'); }
 
@@ -602,15 +601,15 @@
           document.getElementById('btn-bantuan-mode-email').value = res.bantuanModeEmail || 'Buka'; document.getElementById('btn-bantuan-email').value = res.bantuanEmail || '';
           
           savedTemplateConfig = res.templateConfig || "";
-          // COBA MUAT LOCAL STORAGE DULU, JIKA ADA PERUBAHAN YANG BELUM DISIMPAN
+          
           let localConfig = localStorage.getItem('localTemplateConfig');
           if (localConfig) { els = JSON.parse(localConfig); changeCanvasElement(); previewCanvas(); }
       }
     }
 
     function muatKonfigurasiTerakhir() {
-        if(!savedTemplateConfig) return Swal.fire('Info', 'Belum ada pengaturan template yang tersimpan di server.', 'info');
-        try { els = JSON.parse(savedTemplateConfig); localStorage.setItem('localTemplateConfig', savedTemplateConfig); changeCanvasElement(); previewCanvas(); Swal.fire({toast: true, position: 'top-end', showConfirmButton: false, timer: 1500, icon: 'success', title: 'Dimuat dari server!'}); } 
+        if(!savedTemplateConfig) return Swal.fire({title:'Info', text:'Belum ada pengaturan template yang tersimpan di server.', icon:'info', heightAuto:false});
+        try { els = JSON.parse(savedTemplateConfig); localStorage.setItem('localTemplateConfig', savedTemplateConfig); changeCanvasElement(); previewCanvas(); Swal.fire({toast: true, position: 'top-end', showConfirmButton: false, timer: 1500, icon: 'success', title: 'Dimuat dari server!', heightAuto:false}); } 
         catch(e) { console.error("Error parse JSON template"); }
     }
 
@@ -625,8 +624,8 @@
       }, 'POST');
       if(res.success) { 
           savedTemplateConfig = currentConfigStr; 
-          localStorage.removeItem('localTemplateConfig'); // Hapus local storage jika sudah sukses tersimpan ke server
-          Swal.fire('Tersimpan', 'Semua pengaturan berhasil disimpan.', 'success'); 
+          localStorage.removeItem('localTemplateConfig'); 
+          Swal.fire({title:'Tersimpan', text:'Semua pengaturan berhasil disimpan.', icon:'success', heightAuto:false}); 
           loadStats(); 
       }
     }
@@ -634,7 +633,7 @@
     async function changePassword() {
       showLoading('Memproses...');
       const res = await fetchAPI('ubahPass', { oldPass: document.getElementById('p-old').value, newPass: document.getElementById('p-new').value }, 'POST');
-      if(res.success) Swal.fire('Berhasil', '', 'success'); else Swal.fire('Gagal', res.message, 'error');
+      if(res.success) Swal.fire({title:'Berhasil', text:'', icon:'success', heightAuto:false}); else Swal.fire({title:'Gagal', text:res.message, icon:'error', heightAuto:false});
     }
 
     async function loadAgendaAdmin() {
@@ -876,7 +875,7 @@
             try { const res = await fetchAPI('simpanPdf', { base64Data: pdf.output('datauristring'), filename: fileName }, 'POST', 0); if(res.success) successCount++; } catch (err) {}
           }
       }
-      Swal.fire({ title: 'Selesai!', text: `Berhasil mencetak ${successCount} PDF.`, icon: 'success' });
+      Swal.fire({ title: 'Selesai!', text: `Berhasil mencetak ${successCount} PDF.`, icon: 'success', heightAuto: false });
     }
 
     async function triggerKirimEmail() {
@@ -891,12 +890,12 @@
       }
 
       Swal.fire({
-        title: 'Konfirmasi Pengiriman Email', text: confirmText, icon: 'warning', showCancelButton: true, confirmButtonText: 'Kirim Sekarang', confirmButtonColor: '#16a34a'
+        title: 'Konfirmasi Pengiriman Email', text: confirmText, icon: 'warning', showCancelButton: true, confirmButtonText: 'Kirim Sekarang', confirmButtonColor: '#16a34a', heightAuto: false
       }).then(async (result) => {
         if (result.isConfirmed) {
           showLoading('Mengirim Email...');
           const res = await fetchAPI('kirimEmailTTE', { selectedEmails: emailsToTarget }, 'POST', 0); 
-          if(res.success) { Swal.fire('Selesai!', res.message, 'success'); loadDataPeserta(); } else Swal.fire('Gagal', res.message, 'error');
+          if(res.success) { Swal.fire({title:'Selesai!', text:res.message, icon:'success', heightAuto:false}); loadDataPeserta(); } else Swal.fire({title:'Gagal', text:res.message, icon:'error', heightAuto:false});
         }
       });
     }
