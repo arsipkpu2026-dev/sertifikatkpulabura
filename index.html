@@ -494,8 +494,8 @@
     function navTo(view) {
       document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
       document.getElementById('view-' + view).classList.add('active');
-      if(sessionStorage.getItem("admin_logged_in") === "true") { document.getElementById("btn-login-nav").textContent = "Panel Admin"; document.getElementById("btn-logout-nav").classList.remove("hidden"); } 
-      else { document.getElementById("btn-login-nav").textContent = "Panel Admin"; document.getElementById("btn-logout-nav").classList.add("hidden"); }
+      if(sessionStorage.getItem("admin_logged_in") === "true") { document.getElementById("btn-login-nav").textContent = "⚙️"; document.getElementById("btn-logout-nav").classList.remove("hidden"); } 
+      else { document.getElementById("btn-login-nav").textContent = "⚙️"; document.getElementById("btn-logout-nav").classList.add("hidden"); }
       if(view === 'home') refreshLokalUI();
     }
 
