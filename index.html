@@ -422,11 +422,27 @@
         if (fitur === 'hadir') {
             if (st.isOpen) {
                 navTo('hadir'); const infoDiv = document.getElementById('info-waktu-hadir');
+                
+                // CEK CAP STEMPEL DI MEMORI HP PESERTA (Nol Beban Server)
+                let jejakHadir = localStorage.getItem('kpu_labura_hadir_v1');
+                let stempelHTML = '';
+                if (jejakHadir) {
+                    stempelHTML = `<div class="bg-emerald-100 border-2 border-emerald-400 text-emerald-800 p-4 rounded-xl mb-3 shadow-sm font-bold text-xs md:text-sm animate-pulse flex items-center gap-2"><span>✅</span> <span>${jejakHadir}</span></div>`;
+                }
+
                 if(APP_CONFIG.hadir.start || APP_CONFIG.hadir.end) {
                     let strMulai = APP_CONFIG.hadir.start ? new Date(APP_CONFIG.hadir.start).toLocaleString('id-ID', { dateStyle: 'full', timeStyle: 'short' }) : 'Kapan saja';
                     let strSelesai = APP_CONFIG.hadir.end ? new Date(APP_CONFIG.hadir.end).toLocaleString('id-ID', { dateStyle: 'full', timeStyle: 'short' }) : 'Tidak Terbatas';
-                    infoDiv.style.display = 'block'; infoDiv.innerHTML = `📌 <b>Jadwal Pendaftaran:</b><br>Dibuka: <b>${strMulai}</b><br>Ditutup: <b>${strSelesai}</b>`;
-                } else { infoDiv.style.display = 'none'; }
+                    infoDiv.style.display = 'block'; 
+                    // Tampilkan stempel hijau + Info Jadwal
+                    infoDiv.innerHTML = stempelHTML + `📌 <b>Jadwal Pendaftaran:</b><br>Dibuka: <b>${strMulai}</b><br>Ditutup: <b>${strSelesai}</b>`;
+                } else { 
+                    if(stempelHTML) {
+                        infoDiv.style.display = 'block'; infoDiv.innerHTML = stempelHTML;
+                    } else {
+                        infoDiv.style.display = 'none'; 
+                    }
+                }
             } else { Swal.fire({title:'Ditutup', text:st.message, icon:'warning', heightAuto:false}); }
         } else if (fitur === 'buku2') {
             if (st.isOpen) { openDownloadView(2); } else { Swal.fire({title:'Informasi', text:st.message, icon:'info', heightAuto:false}); }
@@ -494,8 +510,8 @@
     function navTo(view) {
       document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
       document.getElementById('view-' + view).classList.add('active');
-      if(sessionStorage.getItem("admin_logged_in") === "true") { document.getElementById("btn-login-nav").textContent = "⚙️"; document.getElementById("btn-logout-nav").classList.remove("hidden"); } 
-      else { document.getElementById("btn-login-nav").textContent = "⚙️"; document.getElementById("btn-logout-nav").classList.add("hidden"); }
+      if(sessionStorage.getItem("admin_logged_in") === "true") { document.getElementById("btn-login-nav").textContent = "Panel Admin"; document.getElementById("btn-logout-nav").classList.remove("hidden"); } 
+      else { document.getElementById("btn-login-nav").textContent = "Panel Admin"; document.getElementById("btn-logout-nav").classList.add("hidden"); }
       if(view === 'home') refreshLokalUI();
     }
 
@@ -570,12 +586,18 @@
       showLoading('Mendaftarkan Kehadiran...');
       const dataText = [ document.getElementById('h-nama').value, document.getElementById('h-instansi').value, inputEmail, document.getElementById('h-hp').value, document.getElementById('h-auto-email').checked ];
       const resTeks = await fetchAPI('hadirTeks', { data: dataText }, 'POST');
+      
       if (resTeks.success) { 
+          // BERIKAN CAP STEMPEL KE HP PESERTA SETELAH SUKSES
+          const waktuSekarang = new Date().toLocaleString('id-ID', { dateStyle: 'full', timeStyle: 'short' });
+          localStorage.setItem('kpu_labura_hadir_v1', 'Anda sudah berhasil terdaftar pada ' + waktuSekarang + ' WIB. Tidak perlu mendaftar ulang.');
+          
           document.getElementById('form-hadir').reset(); 
           navTo('home'); 
           Swal.fire({title:'Berhasil!', text:resTeks.message, icon:'success', heightAuto:false}); 
       } else { Swal.fire({title:'Gagal', text:resTeks.message, icon:'warning', heightAuto:false}); }
     }
+
 
     async function submitDownload(e) {
       e.preventDefault(); showLoading('Mencari...');
@@ -859,7 +881,7 @@
             let rawNomor = modeNomor === 'otomatis' ? (parseInt(pIndex) + 1) + kodeFormat : (dbPeserta[pIndex][7] || "TIDAK-ADA-NOMOR"); let nomorSertifikat = "Nomor : " + rawNomor;
             document.querySelector('.swal2-title').innerHTML = `Memproses ${i+1}/${checks.length}<br><small>${nama}</small>`;
             const pdf = new window.jspdf.jsPDF({ orientation: orientation, unit: 'px', format: [canvas.width, canvas.height] });
-            for (let key of Object.keys(els)) { let fName = els[key].font; if(fName !== 'Arial' && fName !== 'Times' && fName !== 'Courier' && fontCacheBase64[fName]) { pdf.addFileToVFS(`${fName}.ttf`, fontCacheBase64[fName]); pdf.addFont(`${fName}.ttf`, fName, 'normal'); } }
+            for (let key of Object.keys(els)) { let fName = els[key].font; if(fName !== 'Arial' && fName !== 'Times' && fName !== 'Courier' && fontCacheBuffer[fName]) { pdf.addFileToVFS(`${fName}.ttf`, fontCacheBase64[fName]); pdf.addFont(`${fName}.ttf`, fName, 'normal'); } }
             pdf.addImage(templateImg.src, 'JPEG', 0, 0, canvas.width, canvas.height);
             let nx = els.nama.align === 'center' ? els.nama.x + els.nama.w/2 : (els.nama.align === 'right' ? els.nama.x + els.nama.w : els.nama.x); let wNama = els.nama.weight === 'normal' ? 'normal' : 'bold';
             if(els.nama.font === 'Arial') pdf.setFont("helvetica", wNama); else if(els.nama.font === 'Times') pdf.setFont("times", wNama); else if(els.nama.font === 'Courier') pdf.setFont("courier", wNama); else pdf.setFont(els.nama.font, "normal");
