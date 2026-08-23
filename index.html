@@ -344,7 +344,7 @@
     // ==========================================
     // MASUKKAN URL WEB APP GOOGLE APPS SCRIPT
     // ==========================================
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbzn1qanPj1R_Dq42FM9bjmmsIeqqzJzPMxBQw9PXm4acgP_DBGY4B7dv0IR4rrXFcyM/exec"; 
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbydnSbBna_PsWe4Hj17gLqpfVg8uN0Sg9m00x4-V3upUy9sn4I7ZnpmzgQ9mH2QnEkx/exec"; 
 
     // ========================================================
     // KONFIGURASI APLIKASI (GANTI JAM, WA, DAN EMAIL DI SINI)
@@ -386,13 +386,18 @@
         return { isOpen: true, message: '' };
     }
 
-    window.addEventListener('DOMContentLoaded', (event) => { 
-        // Pasang watermark seketika saat halaman dimuat
+    function refreshLokalUI() {
         const stHadir = cekStatusLokal('hadir');
-        if(!stHadir.isOpen) tempelWatermark(document.getElementById('menu-hadir-card'));
+        const divHadir = document.getElementById('menu-hadir-card');
+        if(!stHadir.isOpen) tempelWatermark(divHadir); else hapusWatermark(divHadir);
         
         const stBuku2 = cekStatusLokal('buku2');
-        if(!stBuku2.isOpen) tempelWatermark(document.getElementById('menu-buku2-card'));
+        const divBuku2 = document.getElementById('menu-buku2-card');
+        if(!stBuku2.isOpen) tempelWatermark(divBuku2); else hapusWatermark(divBuku2);
+    }
+
+    window.addEventListener('DOMContentLoaded', (event) => { 
+        refreshLokalUI();
     });
 
     function toggleKodeInput() { document.getElementById('kode-container').style.display = document.getElementById('s-tipe-nomor').value === 'otomatis' ? 'block' : 'none'; }
@@ -404,14 +409,22 @@
       elemen.innerHTML += `<div class='watermark-overlay absolute inset-0 flex items-center justify-center z-20 overflow-hidden bg-slate-900/30 backdrop-blur-[1px] rounded-[1.5rem]'><div class='text-4xl md:text-5xl drop-shadow-lg' title='Belum Dibuka'>🔒</div></div>`;
     }
 
+    function hapusWatermark(elemen) {
+      if(!elemen) return;
+      elemen.style.pointerEvents = 'auto';
+      elemen.style.filter = 'none';
+      const wm = elemen.querySelector('.watermark-overlay');
+      if(wm) wm.remove();
+    }
+
     function validasiAksesFormLokal(fitur) {
         const st = cekStatusLokal(fitur);
         if (fitur === 'hadir') {
             if (st.isOpen) {
                 navTo('hadir'); const infoDiv = document.getElementById('info-waktu-hadir');
-                if(st.start || st.end) {
-                    let strMulai = st.start ? new Date(st.start).toLocaleString('id-ID', { dateStyle: 'full', timeStyle: 'short' }) : 'Kapan saja';
-                    let strSelesai = st.end ? new Date(st.end).toLocaleString('id-ID', { dateStyle: 'full', timeStyle: 'short' }) : 'Tidak Terbatas';
+                if(APP_CONFIG.hadir.start || APP_CONFIG.hadir.end) {
+                    let strMulai = APP_CONFIG.hadir.start ? new Date(APP_CONFIG.hadir.start).toLocaleString('id-ID', { dateStyle: 'full', timeStyle: 'short' }) : 'Kapan saja';
+                    let strSelesai = APP_CONFIG.hadir.end ? new Date(APP_CONFIG.hadir.end).toLocaleString('id-ID', { dateStyle: 'full', timeStyle: 'short' }) : 'Tidak Terbatas';
                     infoDiv.style.display = 'block'; infoDiv.innerHTML = `📌 <b>Jadwal Pendaftaran:</b><br>Dibuka: <b>${strMulai}</b><br>Ditutup: <b>${strSelesai}</b>`;
                 } else { infoDiv.style.display = 'none'; }
             } else { Swal.fire({title:'Ditutup', text:st.message, icon:'warning', heightAuto:false}); }
@@ -426,18 +439,12 @@
             if (phone.startsWith('0')) phone = '62' + phone.substring(1);
             else if (phone.startsWith('8')) phone = '62' + phone;
 
-            Swal.fire({
-                title: 'WhatsApp Admin',
-                html: `
-                  <p class="text-sm text-slate-600 mb-4 font-medium">Hubungi kami melalui WhatsApp:</p>
-                  <div class="flex justify-between items-center bg-green-50 border border-green-200 p-3 rounded-xl mb-4 shadow-inner">
-                      <span class="font-bold text-green-700 text-sm tracking-wide select-all">+${phone}</span>
-                      <button onclick="copyTxt('+${phone}')" class="bg-green-600 text-white px-4 py-1.5 rounded-lg text-xs font-bold hover:bg-green-700 shadow-md transition active:scale-95">Copy</button>
-                  </div>
-                  <a href="https://wa.me/${phone}" target="_blank" class="block w-full bg-green-500 text-white font-bold py-3 rounded-xl text-sm transition shadow-md hover:bg-green-600 active:scale-95 text-center">Lanjutkan ke WhatsApp</a>
-                `,
-                showConfirmButton: false, showCloseButton: true, heightAuto: false, customClass: { popup: 'rounded-[2rem] shadow-2xl' }
-            });
+            let a = document.createElement('a');
+            a.href = `https://wa.me/${phone}`;
+            a.target = '_blank';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
         } else {
             Swal.fire({ icon: 'info', title: 'Informasi', text: 'Layanan bantuan WhatsApp tidak tersedia saat ini.', heightAuto: false, customClass: { popup: 'rounded-[1.5rem]' }});
         }
@@ -445,24 +452,14 @@
 
     function klikBantuanEmail() {
         if(APP_CONFIG.bantuan.email) {
-            Swal.fire({
-                title: 'Email Admin',
-                html: `
-                  <p class="text-sm text-slate-600 mb-4 font-medium">Salin email atau pilih layanan webmail Anda:</p>
-                  <div class="flex justify-between items-center bg-blue-50 border border-blue-200 p-3 rounded-xl mb-4 shadow-inner">
-                      <span class="font-bold text-blue-700 text-sm select-all">${APP_CONFIG.bantuan.email}</span>
-                      <button onclick="copyTxt('${APP_CONFIG.bantuan.email}')" class="bg-blue-600 text-white px-4 py-1.5 rounded-lg text-xs font-bold hover:bg-blue-700 shadow-md transition active:scale-95">Copy</button>
-                  </div>
-                  <div class="grid grid-cols-2 gap-2">
-                      <a href="mailto:${APP_CONFIG.bantuan.email}" class="col-span-2 bg-slate-800 text-white font-bold py-3 rounded-xl text-sm transition shadow-md hover:bg-slate-700 active:scale-95 text-center">📧 Buka Aplikasi Email (Default/HP)</a>
-                      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=${APP_CONFIG.bantuan.email}" target="_blank" class="bg-red-500 text-white font-bold py-2 rounded-xl text-xs transition shadow-md hover:bg-red-600 active:scale-95 text-center flex flex-col justify-center">Buka via<br>Gmail Web</a>
-                      <a href="https://compose.mail.yahoo.com/?to=${APP_CONFIG.bantuan.email}" target="_blank" class="bg-purple-600 text-white font-bold py-2 rounded-xl text-xs transition shadow-md hover:bg-purple-700 active:scale-95 text-center flex flex-col justify-center">Buka via<br>Yahoo Web</a>
-                      <a href="https://outlook.live.com/mail/0/deeplink/compose?to=${APP_CONFIG.bantuan.email}" target="_blank" class="bg-blue-500 text-white font-bold py-2 rounded-xl text-xs transition shadow-md hover:bg-blue-600 active:scale-95 text-center flex flex-col justify-center">Buka via<br>Outlook Web</a>
-                      <a href="https://mail.proton.me/u/0/mail/new?to=${APP_CONFIG.bantuan.email}" target="_blank" class="bg-indigo-800 text-white font-bold py-2 rounded-xl text-xs transition shadow-md hover:bg-indigo-900 active:scale-95 text-center flex flex-col justify-center">Buka via<br>Proton Web</a>
-                  </div>
-                `,
-                showConfirmButton: false, showCloseButton: true, heightAuto: false, customClass: { popup: 'rounded-[2rem] shadow-2xl' }
-            });
+            let emailTarget = APP_CONFIG.bantuan.email;
+            let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            if(isMobile) {
+                window.location.href = `mailto:${emailTarget}`;
+            } else {
+                window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${emailTarget}`, '_blank');
+            }
         } else {
             Swal.fire({ icon: 'info', title: 'Informasi', text: 'Layanan bantuan Email tidak tersedia saat ini.', heightAuto: false, customClass: { popup: 'rounded-[1.5rem]' }});
         }
@@ -499,6 +496,7 @@
       document.getElementById('view-' + view).classList.add('active');
       if(sessionStorage.getItem("admin_logged_in") === "true") { document.getElementById("btn-login-nav").textContent = "Panel Admin"; document.getElementById("btn-logout-nav").classList.remove("hidden"); } 
       else { document.getElementById("btn-login-nav").textContent = "Panel Admin"; document.getElementById("btn-logout-nav").classList.add("hidden"); }
+      if(view === 'home') refreshLokalUI();
     }
 
     function openDownloadView(type) {
@@ -565,7 +563,6 @@
 
     async function submitHadirTeks(e) {
       e.preventDefault();
-      // Validasi LOKAL instan
       const st = cekStatusLokal('hadir');
       if (!st.isOpen) return Swal.fire({title:'Gagal', text:st.message, icon:'warning', heightAuto:false});
 
