@@ -604,7 +604,7 @@ function tempelWatermark(elemen) {
       
       if (resTeks.success) { 
           const waktuSekarang = new Date().toLocaleString('id-ID', { dateStyle: 'full', timeStyle: 'short' });
-          localStorage.setItem('kpu_labura_hadir_v1', `${inputNama} (${waktuSekarang} WIB)`);
+          localStorage.setItem('kpu_labura_hadir_v1', `${inputNama} | ${inputEmail} (${waktuSekarang} WIB)`);
           
           document.getElementById('form-hadir').reset(); 
           navTo('home'); 
