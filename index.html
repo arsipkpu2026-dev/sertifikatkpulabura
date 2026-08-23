@@ -57,7 +57,7 @@
           </button>
           
           <!-- Tombol Admin -->
-          <button id="btn-login-nav" class="text-[10px] md:text-xs font-bold bg-white/50 text-slate-700 px-4 py-2 rounded-xl border border-slate-200/50 shadow-sm hover:bg-slate-50 active:scale-95 transition ml-1 md:ml-2">Panel Admin</button>
+          <button id="btn-login-nav" class="text-[10px] md:text-xs font-bold bg-white/50 text-slate-700 px-4 py-2 rounded-xl border border-slate-200/50 shadow-sm hover:bg-slate-50 active:scale-95 transition ml-1 md:ml-2">🛠️</button>
           <button id="btn-logout-nav" onclick="logoutAdmin()" class="hidden text-[10px] md:text-xs font-bold bg-red-50 text-red-600 px-4 py-2 rounded-xl border border-red-200 shadow-sm hover:bg-red-100 active:scale-95 transition">Logout</button>
         </div>
       </div>
@@ -171,7 +171,7 @@
       <!-- VIEW: ADMIN LOGIN -->
       <div id="view-login" class="view-section flex-col bg-white/95 backdrop-blur-xl p-8 lg:p-14 rounded-[2rem] shadow-2xl border border-white/60 my-auto max-w-sm mx-auto w-full">
         <div class="flex justify-center mb-5"><div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center text-3xl shadow-inner border border-slate-200">🔐</div></div>
-        <h2 class="text-2xl font-extrabold text-slate-800 mb-6 text-center">Panel Admin</h2>
+        <h2 class="text-2xl font-extrabold text-slate-800 mb-6 text-center">🛠️</h2>
         <form id="form-login" onsubmit="submitLogin(event)" class="flex flex-col gap-4">
           <input type="text" id="l-user" required placeholder="Username" class="w-full bg-white border border-slate-300 rounded-xl p-3.5 text-sm focus:ring-2 focus:ring-slate-800 text-center font-bold">
           <input type="password" id="l-pass" required placeholder="Password" class="w-full bg-white border border-slate-300 rounded-xl p-3.5 text-sm focus:ring-2 focus:ring-slate-800 text-center font-bold">
@@ -523,8 +523,8 @@
     function navTo(view) {
       document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
       document.getElementById('view-' + view).classList.add('active');
-      if(sessionStorage.getItem("admin_logged_in") === "true") { document.getElementById("btn-login-nav").textContent = "Panel Admin"; document.getElementById("btn-logout-nav").classList.remove("hidden"); } 
-      else { document.getElementById("btn-login-nav").textContent = "Panel Admin"; document.getElementById("btn-logout-nav").classList.add("hidden"); }
+      if(sessionStorage.getItem("admin_logged_in") === "true") { document.getElementById("btn-login-nav").textContent = "🛠️"; document.getElementById("btn-logout-nav").classList.remove("hidden"); } 
+      else { document.getElementById("btn-login-nav").textContent = "🛠️"; document.getElementById("btn-logout-nav").classList.add("hidden"); }
       if(view === 'home') refreshLokalUI();
     }
 
