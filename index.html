@@ -52,9 +52,9 @@
         <!-- BANTUAN & ADMIN NAV -->
         <div class="flex items-center gap-2">
           <!-- Tombol Hubungi Admin (Gabungan) -->
-          <button onclick="klikHubungiAdmin()" class="text-[10px] md:text-xs font-bold bg-slate-800 text-white px-4 py-2 rounded-xl shadow-md hover:bg-slate-700 active:scale-95 transition flex items-center gap-1.5" title="Pusat Bantuan">
-            🎧 <span class="hidden sm:inline">Hubungi Admin</span>
-          </button>
+<button onclick="klikHubungiAdmin()" class="text-[10px] md:text-xs font-bold bg-slate-800 text-white px-4 py-2 rounded-xl shadow-md hover:bg-slate-700 active:scale-95 transition flex items-center gap-1.5" title="Pusat Bantuan">
+   🎧 <span>Hubungi Admin</span>
+</button>
           
           <!-- Tombol Admin -->
           <button id="btn-login-nav" class="text-[10px] md:text-xs font-bold bg-white/50 text-slate-700 px-4 py-2 rounded-xl border border-slate-200/50 shadow-sm hover:bg-slate-50 active:scale-95 transition ml-1 md:ml-2">🛠️</button>
@@ -95,7 +95,7 @@
             <div class="absolute -right-4 -bottom-4 text-white/10 text-8xl font-black select-none pointer-events-none group-hover:scale-110 transition-transform">📜</div>
             <div class="relative z-10 flex flex-col gap-3">
               <div class="w-14 h-14 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-2xl shadow-inner">📜</div>
-              <div><h3 class="text-lg font-black tracking-wide">Sertifikat Buku I</h3><p class="text-emerald-50 text-[11px] mt-1 font-medium">Cari sertifikat Bedah Buku 1.</p></div>
+              <div><h3 class="text-lg font-black tracking-wide">Sertifikat Bedah Buku I</h3><p class="text-emerald-50 text-[11px] mt-1 font-medium">Cari dan unduh.</p></div>
             </div>
           </div>
 
@@ -103,7 +103,7 @@
             <div class="absolute -right-4 -bottom-4 text-white/10 text-8xl font-black select-none pointer-events-none group-hover:scale-110 transition-transform">📘</div>
             <div class="relative z-10 flex flex-col gap-3">
               <div class="w-14 h-14 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-2xl shadow-inner">📘</div>
-              <div><h3 class="text-lg font-black tracking-wide">Sertifikat Buku II</h3><p class="text-cyan-50 text-[11px] mt-1 font-medium">Cari sertifikat Bedah Buku 2.</p></div>
+              <div><h3 class="text-lg font-black tracking-wide">Sertifikat Bedah Buku II</h3><p class="text-cyan-50 text-[11px] mt-1 font-medium">Cari dan unduh.</p></div>
             </div>
           </div>
 
@@ -400,12 +400,12 @@
 
     function toggleKodeInput() { document.getElementById('kode-container').style.display = document.getElementById('s-tipe-nomor').value === 'otomatis' ? 'block' : 'none'; }
 
-    function tempelWatermark(elemen) {
-      if(!elemen || elemen.querySelector('.watermark-overlay')) return;
-      elemen.style.pointerEvents = 'none';
-      elemen.style.filter = 'grayscale(50%) opacity(80%)';
-      elemen.innerHTML += `<div class='watermark-overlay absolute inset-0 flex items-center justify-center z-20 overflow-hidden bg-slate-900/30 backdrop-blur-[1px] rounded-[1.5rem]'><div class='text-4xl md:text-5xl drop-shadow-lg' title='Belum Dibuka'>🔒</div></div>`;
-    }
+function tempelWatermark(elemen) {
+  if(!elemen || elemen.querySelector('.watermark-overlay')) return;
+  elemen.style.pointerEvents = 'none';
+  elemen.style.filter = 'grayscale(50%) opacity(80%)';
+  elemen.innerHTML += `<div class='watermark-overlay absolute inset-0 flex items-center justify-center z-20 overflow-hidden bg-slate-900/30 backdrop-blur-[1px] rounded-[1.5rem]'><div class='text-4xl md:text-5xl drop-shadow-lg mb-12' title='Belum Dibuka'>🔒</div></div>`;
+}
 
     function hapusWatermark(elemen) {
       if(!elemen) return;
