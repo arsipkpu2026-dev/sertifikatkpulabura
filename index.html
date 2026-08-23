@@ -417,24 +417,27 @@
       if(wm) wm.remove();
     }
 
-    function validasiAksesFormLokal(fitur) {
+function validasiAksesFormLokal(fitur) {
         const st = cekStatusLokal(fitur);
         if (fitur === 'hadir') {
             if (st.isOpen) {
                 navTo('hadir'); const infoDiv = document.getElementById('info-waktu-hadir');
                 
-                // CEK CAP STEMPEL DI MEMORI HP PESERTA (Nol Beban Server)
+                // CEK CAP STEMPEL (Sekarang dengan nama dan tombol reset)
                 let jejakHadir = localStorage.getItem('kpu_labura_hadir_v1');
                 let stempelHTML = '';
                 if (jejakHadir) {
-                    stempelHTML = `<div class="bg-emerald-100 border-2 border-emerald-400 text-emerald-800 p-4 rounded-xl mb-3 shadow-sm font-bold text-xs md:text-sm animate-pulse flex items-center gap-2"><span>✅</span> <span>${jejakHadir}</span></div>`;
+                    stempelHTML = `
+                    <div class="bg-emerald-100 border border-emerald-400 text-emerald-800 p-4 rounded-xl mb-3 shadow-sm font-bold text-xs md:text-sm flex flex-col gap-3">
+                        <div class="flex items-start gap-2"><span>✅</span> <span>Pendaftaran terakhir di perangkat ini:<br><span class="text-emerald-900">${jejakHadir}</span></span></div>
+                        <button type="button" onclick="hapusJejakLokal()" class="bg-white border border-emerald-300 text-emerald-700 px-4 py-2 rounded-lg text-[10px] w-fit hover:bg-emerald-50 active:scale-95 transition shadow-sm font-extrabold">Daftarkan Peserta Lain</button>
+                    </div>`;
                 }
 
                 if(APP_CONFIG.hadir.start || APP_CONFIG.hadir.end) {
                     let strMulai = APP_CONFIG.hadir.start ? new Date(APP_CONFIG.hadir.start).toLocaleString('id-ID', { dateStyle: 'full', timeStyle: 'short' }) : 'Kapan saja';
                     let strSelesai = APP_CONFIG.hadir.end ? new Date(APP_CONFIG.hadir.end).toLocaleString('id-ID', { dateStyle: 'full', timeStyle: 'short' }) : 'Tidak Terbatas';
                     infoDiv.style.display = 'block'; 
-                    // Tampilkan stempel hijau + Info Jadwal
                     infoDiv.innerHTML = stempelHTML + `📌 <b>Jadwal Pendaftaran:</b><br>Dibuka: <b>${strMulai}</b><br>Ditutup: <b>${strSelesai}</b>`;
                 } else { 
                     if(stempelHTML) {
@@ -447,6 +450,11 @@
         } else if (fitur === 'buku2') {
             if (st.isOpen) { openDownloadView(2); } else { Swal.fire({title:'Informasi', text:st.message, icon:'info', heightAuto:false}); }
         }
+    }
+
+    function hapusJejakLokal() {
+        localStorage.removeItem('kpu_labura_hadir_v1');
+        validasiAksesFormLokal('hadir'); // Muat ulang layar secara instan
     }
 
     function klikBantuanWA() {
@@ -577,27 +585,28 @@
 
     function copyTxt(text) { navigator.clipboard.writeText(text).then(() => Swal.fire({ toast: true, position: 'top-end', showConfirmButton: false, timer: 1500, icon: 'success', title: 'Tersalin!', heightAuto: false })); }
 
-    async function submitHadirTeks(e) {
+async function submitHadirTeks(e) {
       e.preventDefault();
       const st = cekStatusLokal('hadir');
       if (!st.isOpen) return Swal.fire({title:'Gagal', text:st.message, icon:'warning', heightAuto:false});
 
+      const inputNama = document.getElementById('h-nama').value.trim();
       const inputEmail = document.getElementById('h-email').value.toLowerCase().trim();
+      
       showLoading('Mendaftarkan Kehadiran...');
-      const dataText = [ document.getElementById('h-nama').value, document.getElementById('h-instansi').value, inputEmail, document.getElementById('h-hp').value, document.getElementById('h-auto-email').checked ];
+      const dataText = [ inputNama, document.getElementById('h-instansi').value, inputEmail, document.getElementById('h-hp').value, document.getElementById('h-auto-email').checked ];
       const resTeks = await fetchAPI('hadirTeks', { data: dataText }, 'POST');
       
       if (resTeks.success) { 
-          // BERIKAN CAP STEMPEL KE HP PESERTA SETELAH SUKSES
+          // SIMPAN NAMA PESERTA DAN WAKTU KE MEMORI LOKAL
           const waktuSekarang = new Date().toLocaleString('id-ID', { dateStyle: 'full', timeStyle: 'short' });
-          localStorage.setItem('kpu_labura_hadir_v1', 'Anda sudah berhasil terdaftar pada ' + waktuSekarang + ' WIB. Tidak perlu mendaftar ulang.');
+          localStorage.setItem('kpu_labura_hadir_v1', `${inputNama} (${waktuSekarang} WIB)`);
           
           document.getElementById('form-hadir').reset(); 
           navTo('home'); 
           Swal.fire({title:'Berhasil!', text:resTeks.message, icon:'success', heightAuto:false}); 
       } else { Swal.fire({title:'Gagal', text:resTeks.message, icon:'warning', heightAuto:false}); }
     }
-
 
     async function submitDownload(e) {
       e.preventDefault(); showLoading('Mencari...');
