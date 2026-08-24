@@ -41,6 +41,21 @@
   <!-- CONTAINER UTAMA -->
   <div class="relative z-10 flex flex-col h-full w-full">
     
+    <!-- BANNER PEMBERITAHUAN MIGRASI (MOBILE FRIENDLY) -->
+    <div id="migration-banner" class="bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 text-white px-3 py-2 sm:py-2.5 flex items-center justify-between shadow-lg text-xs md:text-sm border-b border-orange-400/40 z-50 flex-none">
+      <div class="flex items-center gap-2 overflow-hidden mr-2">
+        <span class="text-base sm:text-lg animate-bounce">📢</span>
+        <p class="truncate font-medium">
+          Layanan migrasi ke domain baru: 
+          <a href="https://bedahbukukpulabura.vercel.app/" target="_blank" class="underline font-black text-amber-100 hover:text-white ml-1">bedahbukukpulabura.vercel.app</a>
+        </p>
+      </div>
+      <div class="flex items-center gap-1.5 shrink-0">
+        <a href="https://bedahbukukpulabura.vercel.app/" target="_blank" class="bg-white text-orange-700 font-extrabold px-2.5 py-1 rounded-lg text-[11px] shadow-sm hover:bg-orange-50 active:scale-95 transition">Buka ➔</a>
+        <button onclick="document.getElementById('migration-banner').style.display='none'" class="text-white/80 hover:text-white px-1.5 text-base font-bold leading-none">&times;</button>
+      </div>
+    </div>
+
     <!-- HEADER -->
     <header class="bg-white/90 backdrop-blur-md shadow-sm border-b border-white/20 flex-none">
       <div class="w-full max-w-[98%] lg:max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
@@ -51,12 +66,10 @@
         
         <!-- BANTUAN & ADMIN NAV -->
         <div class="flex items-center gap-2">
-          <!-- Tombol Hubungi Admin (Gabungan) -->
           <button onclick="klikHubungiAdmin()" class="text-[10px] md:text-xs font-bold bg-slate-800 text-white px-4 py-2 rounded-xl shadow-md hover:bg-slate-700 active:scale-95 transition flex items-center gap-1.5" title="Pusat Bantuan">
              🎧 <span>Hubungi Admin</span>
           </button>
           
-          <!-- Tombol Admin -->
           <button id="btn-login-nav" class="text-[10px] md:text-xs font-bold bg-white/50 text-slate-700 px-4 py-2 rounded-xl border border-slate-200/50 shadow-sm hover:bg-slate-50 active:scale-95 transition ml-1 md:ml-2">🛠️</button>
           <button id="btn-logout-nav" onclick="logoutAdmin()" class="hidden text-[10px] md:text-xs font-bold bg-red-50 text-red-600 px-4 py-2 rounded-xl border border-red-200 shadow-sm hover:bg-red-100 active:scale-95 transition">Logout</button>
         </div>
@@ -99,7 +112,6 @@
             </div>
           </div>
 
-          <!-- Modifikasi Tooltip (title) di Menu Sertifikat Bedah Buku II -->
           <div id="menu-buku2-card" onclick="validasiAksesFormLokal('buku2')" title="Sertifikat elektronik kegiatan Bedah Buku II sedang dalam tahap pemrosesan dan validasi. Dokumen baru dapat diakses dan diunduh melalui sistem paling cepat H+1 setelah kegiatan selesai dilaksanakan." class="group relative bg-gradient-to-br from-cyan-600 to-blue-700 text-white p-5 rounded-[1.5rem] shadow-xl hover:-translate-y-2 transition-all cursor-pointer overflow-hidden border border-cyan-500/50 relative">
             <div class="absolute -right-4 -bottom-4 text-white/10 text-8xl font-black select-none pointer-events-none group-hover:scale-110 transition-transform">📘</div>
             <div class="relative z-10 flex flex-col gap-3">
@@ -305,7 +317,6 @@
         
         <!-- PENGATURAN UMUM & KEAMANAN -->
         <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <!-- Pengaturan Umum (Sertifikat & Email Laporan) -->
             <div class="bg-white p-5 rounded-[1.5rem] border border-slate-200 shadow-sm flex flex-col justify-between">
                <div>
                    <h4 class="text-xs font-extrabold text-slate-800 uppercase border-b pb-2 mb-3 border-slate-200">⚙️ Pengaturan Umum (Sertifikat)</h4>
@@ -321,7 +332,6 @@
                <button onclick="saveSetUmum()" class="mt-4 w-full bg-slate-800 text-white font-bold py-2.5 rounded-lg text-xs transition active:scale-95 shadow-sm hover:bg-slate-700">Simpan Pengaturan Umum</button>
             </div>
 
-            <!-- Ganti Password -->
             <div class="bg-slate-50 p-5 rounded-[1.5rem] border shadow-sm flex flex-col justify-between">
                <div>
                  <h3 class="text-xs font-extrabold text-slate-800 uppercase border-b pb-2 mb-3 border-slate-200">🔐 Ganti Sandi Admin</h3>
@@ -346,36 +356,61 @@
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
 
-    // ==========================================
-    // MASUKKAN URL WEB APP GOOGLE APPS SCRIPT
-    // ==========================================
     const GAS_URL = "https://script.google.com/macros/s/AKfycbyoNtlYsUfD8Z2h9b21ghI_mkz6_cW1XlWC5JPzEQ4TpvzNEhecC5_KPav_EygHMIR5/exec"; 
 
-    // ========================================================
-    // KONFIGURASI APLIKASI (GANTI JAM, WA, DAN EMAIL DI SINI)
-    // ========================================================
     const APP_CONFIG = {
       hadir: {
-        mode: 'Timer', // 'Buka', 'Tutup', 'Timer'
-        start: '2026-08-23T00:00:00+07:00', // Jam Buka (WIB)
-        end: '2026-08-27T17:15:00+07:00',   // Jam Tutup (WIB)
+        mode: 'Timer',
+        start: '2026-08-23T00:00:00+07:00',
+        end: '2026-08-27T17:15:00+07:00',
         msg: 'Maaf, form daftar hadir belum dibuka atau sudah ditutup.'
       },
-      // Modifikasi Pop Up (msg) di Menu Sertifikat Bedah Buku II
       buku2: {
-        mode: 'Tutup', // 'Buka', 'Tutup'
+        mode: 'Tutup',
         msg: 'Sertifikat elektronik baru dapat diakses dan diunduh melalui sistem paling cepat H+1 setelah kegiatan selesai dilaksanakan.'
       },
       bantuan: {
-        wa: '6281263184787', // Isi nomor WA untuk bantuan
-        email: 'arsipkpu2026@gmail.com' // Isi email untuk bantuan
+        wa: '6281263184787',
+        email: 'arsipkpu2026@gmail.com'
       }
     };
 
     let savedTemplateConfig = ""; 
     let currentDownloadType = 1; 
 
-    // VALIDASI LOKAL (TANPA DELAY KE SERVER)
+    // POPUP NOTIFIKASI MIGRASI OTOMATIS SAAT PERTAMA KALI HALAMAN DIBUKA
+    window.addEventListener('DOMContentLoaded', (event) => { 
+        refreshLokalUI();
+
+        // Tampilkan Popup Pengalihan / Migrasi
+        setTimeout(() => {
+          Swal.fire({
+            title: 'Website Resmi Berpindah!',
+            html: `
+              <div class="text-left text-xs sm:text-sm text-slate-600 mb-3 leading-relaxed">
+                <p class="mb-2">Aplikasi layanan sertifikat dan mandiri KPU Kabupaten Labuhanbatu Utara telah resmi bermigrasi ke alamat domain baru:</p>
+                <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 font-mono text-orange-700 font-bold text-center break-all my-2">
+                  https://bedahbukukpulabura.vercel.app/
+                </div>
+                <p class="text-[11px] text-slate-500 mt-2">Silakan simpan/bookmark tautan baru tersebut untuk kemudahan akses selanjutnya.</p>
+              </div>
+            `,
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonText: 'Kunjungi Website Baru ➔',
+            cancelButtonText: 'Tetap di Sini',
+            confirmButtonColor: '#ea580c',
+            cancelButtonColor: '#64748b',
+            customClass: { popup: 'rounded-[2rem] shadow-2xl' },
+            heightAuto: false
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.open('https://bedahbukukpulabura.vercel.app/', '_blank');
+            }
+          });
+        }, 600);
+    });
+
     function cekStatusLokal(fitur) {
         const now = new Date().getTime();
         const cfg = APP_CONFIG[fitur];
@@ -402,17 +437,11 @@
         if(!stBuku2.isOpen) tempelWatermark(divBuku2); else hapusWatermark(divBuku2);
     }
 
-    window.addEventListener('DOMContentLoaded', (event) => { 
-        refreshLokalUI();
-    });
-
     function toggleKodeInput() { document.getElementById('kode-container').style.display = document.getElementById('s-tipe-nomor').value === 'otomatis' ? 'block' : 'none'; }
 
-function tempelWatermark(elemen) {
+    function tempelWatermark(elemen) {
       if(!elemen || elemen.querySelector('.watermark-overlay')) return;
-      // pointer-events: none; pada induk dihapus agar tetap bisa diklik
       elemen.style.filter = 'grayscale(50%) opacity(80%)';
-      // Kita pindahkan penahan kliknya hanya ke lapisan abu-abu saja (style='pointer-events: none;')
       elemen.innerHTML += `<div class='watermark-overlay absolute inset-0 flex items-center justify-center z-20 overflow-hidden bg-slate-900/30 backdrop-blur-[1px] rounded-[1.5rem]' style='pointer-events: none;'><div class='text-4xl md:text-5xl drop-shadow-lg mb-12' title='Belum Dibuka'>🔒</div></div>`;
     }
 
@@ -429,8 +458,6 @@ function tempelWatermark(elemen) {
         if (fitur === 'hadir') {
             if (st.isOpen) {
                 navTo('hadir'); const infoDiv = document.getElementById('info-waktu-hadir');
-                
-                // CEK CAP STEMPEL
                 let jejakHadir = localStorage.getItem('kpu_labura_hadir_v1');
                 let stempelHTML = '';
                 if (jejakHadir) {
@@ -487,7 +514,6 @@ function tempelWatermark(elemen) {
         let emailLink = isMobile ? `mailto:${emailConfig}` : `https://mail.google.com/mail/?view=cm&fs=1&to=${emailConfig}`;
 
         let waButtonHtml = waConfig ? `<a href="https://wa.me/${phone}" target="_blank" class="w-full bg-green-500 text-white font-bold py-3 rounded-xl text-sm transition shadow-md hover:bg-green-600 active:scale-95 text-center flex items-center justify-center gap-2">💬 Hubungi via WhatsApp</a>` : '';
-        
         let emailButtonHtml = emailConfig ? `<a href="${emailLink}" target="_blank" class="w-full bg-blue-500 text-white font-bold py-3 rounded-xl text-sm transition shadow-md hover:bg-blue-600 active:scale-95 text-center flex items-center justify-center gap-2">📧 Hubungi via Email</a>` : '';
 
         Swal.fire({
@@ -620,7 +646,6 @@ function tempelWatermark(elemen) {
       
       if (resTeks.success) { 
           const waktuSekarang = new Date().toLocaleString('id-ID', { dateStyle: 'full', timeStyle: 'short' });
-          // Modifikasi: Menyimpan Nama dan Email di localStorage
           localStorage.setItem('kpu_labura_hadir_v1', `${inputNama} | ${inputEmail} (${waktuSekarang} WIB)`);
           
           document.getElementById('form-hadir').reset(); 
@@ -655,7 +680,6 @@ function tempelWatermark(elemen) {
       else Swal.fire({title:'Gagal', text:res.message, icon:'warning', heightAuto:false});
     }
 
-    // --- ADMIN LOGIC ---
     async function submitLogin(e) {
       e.preventDefault(); showLoading('Verifikasi...');
       const res = await fetchAPI('login', { user: document.getElementById('l-user').value, pass: document.getElementById('l-pass').value }, 'GET');
@@ -730,7 +754,6 @@ function tempelWatermark(elemen) {
     }
     async function delEbook(id) { if(!confirm("Hapus E-Book?")) return; showLoading('Menghapus...'); await fetchAPI('delEbook', { id: id }, 'POST'); loadEbookAdmin(); Swal.close(); }
 
-    // --- TEMPLATE LOGIC ---
     const canvas = document.getElementById('cert-canvas'); const ctx = canvas.getContext('2d');
     let basePdfBytes = null; let templateImg = new Image(); let templateType = 'none'; 
     let isDragging = false; let activeEl = 'nama'; 
@@ -946,7 +969,6 @@ function tempelWatermark(elemen) {
 
     async function triggerKirimEmail() {
       const checks = document.querySelectorAll('.chk-peserta:checked');
-      
       let confirmText = ''; let emailsToTarget = [];
       if (checks.length > 0) {
           checks.forEach(cb => emailsToTarget.push(dbPeserta[cb.value][3]));
@@ -965,7 +987,6 @@ function tempelWatermark(elemen) {
         }
       });
     }
-
   </script>
 </body>
 </html>
