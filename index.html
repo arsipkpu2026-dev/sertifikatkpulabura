@@ -408,11 +408,12 @@
 
     function toggleKodeInput() { document.getElementById('kode-container').style.display = document.getElementById('s-tipe-nomor').value === 'otomatis' ? 'block' : 'none'; }
 
-    function tempelWatermark(elemen) {
+function tempelWatermark(elemen) {
       if(!elemen || elemen.querySelector('.watermark-overlay')) return;
-      elemen.style.pointerEvents = 'none';
+      // pointer-events: none; pada induk dihapus agar tetap bisa diklik
       elemen.style.filter = 'grayscale(50%) opacity(80%)';
-      elemen.innerHTML += `<div class='watermark-overlay absolute inset-0 flex items-center justify-center z-20 overflow-hidden bg-slate-900/30 backdrop-blur-[1px] rounded-[1.5rem]'><div class='text-4xl md:text-5xl drop-shadow-lg mb-12' title='Belum Dibuka'>🔒</div></div>`;
+      // Kita pindahkan penahan kliknya hanya ke lapisan abu-abu saja (style='pointer-events: none;')
+      elemen.innerHTML += `<div class='watermark-overlay absolute inset-0 flex items-center justify-center z-20 overflow-hidden bg-slate-900/30 backdrop-blur-[1px] rounded-[1.5rem]' style='pointer-events: none;'><div class='text-4xl md:text-5xl drop-shadow-lg mb-12' title='Belum Dibuka'>🔒</div></div>`;
     }
 
     function hapusWatermark(elemen) {
