@@ -656,7 +656,7 @@
 
     async function cariEmailLupa() {
         const inputNama = document.getElementById('d-nama').value.trim();
-        if(!inputNama || inputNama.length < 3) return Swal.fire({icon: 'warning', title: 'Perhatian', text: 'Ketik minimal 3 huruf nama Anda di kolom atas terlebih dahulu. (Contoh: jika nama "Sudarsono" sering gagal, ketik saja "Sudar").', heightAuto: false});
+        if(!inputNama || inputNama.length < 3) return Swal.fire({icon: 'warning', title: 'Perhatian', text: 'Ketik nama Anda di kolom atas terlebih dahulu.', heightAuto: false});
         
         showLoading('Mencari Petunjuk Email...');
         const res = await fetchAPI('cariEmail', { nama: inputNama, jenis: currentDownloadType }, 'GET');
