@@ -356,7 +356,7 @@
     const APP_CONFIG = {
       hadir: {
         mode: 'Timer', // 'Buka', 'Tutup', 'Timer'
-        start: '2026-08-27T00:00:00+07:00', // Jam Buka (WIB)
+        start: '2026-08-23T00:00:00+07:00', // Jam Buka (WIB)
         end: '2026-08-27T17:15:00+07:00',   // Jam Tutup (WIB)
         msg: 'Maaf, form daftar hadir belum dibuka atau sudah ditutup.'
       },
@@ -627,7 +627,7 @@
 
     async function cariEmailLupa() {
         const inputNama = document.getElementById('d-nama').value.trim();
-        if(!inputNama || inputNama.length < 3) return Swal.fire({icon: 'warning', title: 'Perhatian', text: 'Ketik minimal 3 huruf nama Anda di kolom atas terlebih dahulu. (Contoh: jika nama "Sudarsono" sering gagal, ketik saja "Sudar").', heightAuto: false});
+        if(!inputNama || inputNama.length < 3) return Swal.fire({icon: 'warning', title: 'Perhatian', text: 'Ketik nama Anda di kolom atas terlebih dahulu.', heightAuto: false});
         
         showLoading('Mencari Petunjuk Email...');
         const res = await fetchAPI('cariEmail', { nama: inputNama, jenis: currentDownloadType }, 'GET');
