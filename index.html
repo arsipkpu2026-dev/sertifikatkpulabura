@@ -99,7 +99,8 @@
             </div>
           </div>
 
-          <div id="menu-buku2-card" onclick="validasiAksesFormLokal('buku2')" class="group relative bg-gradient-to-br from-cyan-600 to-blue-700 text-white p-5 rounded-[1.5rem] shadow-xl hover:-translate-y-2 transition-all cursor-pointer overflow-hidden border border-cyan-500/50 relative">
+          <!-- Modifikasi Tooltip (title) di Menu Sertifikat Bedah Buku II -->
+          <div id="menu-buku2-card" onclick="validasiAksesFormLokal('buku2')" title="Sertifikat elektronik kegiatan Bedah Buku II sedang dalam tahap pemrosesan dan validasi. Dokumen baru dapat diakses dan diunduh melalui sistem paling cepat H+1 setelah kegiatan selesai dilaksanakan." class="group relative bg-gradient-to-br from-cyan-600 to-blue-700 text-white p-5 rounded-[1.5rem] shadow-xl hover:-translate-y-2 transition-all cursor-pointer overflow-hidden border border-cyan-500/50 relative">
             <div class="absolute -right-4 -bottom-4 text-white/10 text-8xl font-black select-none pointer-events-none group-hover:scale-110 transition-transform">📘</div>
             <div class="relative z-10 flex flex-col gap-3">
               <div class="w-14 h-14 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-2xl shadow-inner">📘</div>
@@ -356,13 +357,14 @@
     const APP_CONFIG = {
       hadir: {
         mode: 'Timer', // 'Buka', 'Tutup', 'Timer'
-        start: '2026-08-27T00:00:00+07:00', // Jam Buka (WIB)
+        start: '2026-08-23T00:00:00+07:00', // Jam Buka (WIB)
         end: '2026-08-27T17:15:00+07:00',   // Jam Tutup (WIB)
         msg: 'Maaf, form daftar hadir belum dibuka atau sudah ditutup.'
       },
+      // Modifikasi Pop Up (msg) di Menu Sertifikat Bedah Buku II
       buku2: {
         mode: 'Tutup', // 'Buka', 'Tutup'
-        msg: 'Sertifikat Bedah Buku II belum tersedia saat ini.'
+        msg: 'Sertifikat elektronik baru dapat diakses dan diunduh melalui sistem paling cepat H+1 setelah kegiatan selesai dilaksanakan.'
       },
       bantuan: {
         wa: '6281263184787', // Isi nomor WA untuk bantuan
@@ -617,6 +619,7 @@
       
       if (resTeks.success) { 
           const waktuSekarang = new Date().toLocaleString('id-ID', { dateStyle: 'full', timeStyle: 'short' });
+          // Modifikasi: Menyimpan Nama dan Email di localStorage
           localStorage.setItem('kpu_labura_hadir_v1', `${inputNama} | ${inputEmail} (${waktuSekarang} WIB)`);
           
           document.getElementById('form-hadir').reset(); 
@@ -627,7 +630,7 @@
 
     async function cariEmailLupa() {
         const inputNama = document.getElementById('d-nama').value.trim();
-        if(!inputNama || inputNama.length < 3) return Swal.fire({icon: 'warning', title: 'Perhatian', text: 'Ketik nama Anda di kolom atas terlebih dahulu.', heightAuto: false});
+        if(!inputNama || inputNama.length < 3) return Swal.fire({icon: 'warning', title: 'Perhatian', text: 'Ketik minimal 3 huruf nama Anda di kolom atas terlebih dahulu. (Contoh: jika nama "Sudarsono" sering gagal, ketik saja "Sudar").', heightAuto: false});
         
         showLoading('Mencari Petunjuk Email...');
         const res = await fetchAPI('cariEmail', { nama: inputNama, jenis: currentDownloadType }, 'GET');
